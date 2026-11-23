@@ -16,6 +16,7 @@
 <meta property="og:locale" content="en_CA">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
+<link rel="preload" as="image" href="/assets/office-tray.webp" fetchpriority="high">
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {
@@ -165,19 +166,24 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="wrap">
-<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> Toronto Cookies</a>
+<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> <span>Toronto Cookies</span></a>
 <nav aria-label="Main"><a href="/">Home</a><a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a><a href="/faq/">FAQ</a><a href="/order/">Order / quote</a></nav>
 </div></header>
-<main id="main" class="wrap">
+<main id="main" class="wrap page">
+<div class="product-intro">
+<figure class="product-photo"><img src="/assets/office-tray.webp" alt="A parchment-lined bowl filled with chocolate chip cookies to share" width="1100" height="825" fetchpriority="high" decoding="async"></figure>
+<div>
 <p class="crumbs"><a href="/">Home</a> › <a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a> › Office Holiday Cookie Tray</p>
 <h1>Office holiday party cookie tray in Toronto</h1>
 <p class="lede"><strong>Office Holiday Cookie Tray: $129 CAD.</strong> A shareable tray of 24 to 30 fresh cookies for the office, the holiday party, or a client meeting, delivered to your Toronto office.</p>
 <div class="buy"><a class="btn" href="https://buy.stripe.com/eVq3cua5N2AJgj6dOi9ws03" data-track="pay_link_clicked" data-package="office-tray">Pay $129 securely</a> <a class="btn btn-ghost" href="/order/?package=office-tray" data-track="quote_cta_clicked" data-package="office-tray">Ask a question first</a></div>
 <p class="notice"><strong>2026 holiday deadline:</strong> order by Wednesday, December 9, 2026 for delivery by Friday, December 18, 2026.</p>
+</div>
+</div>
 <h2>What's included</h2><ul><li>24 to 30 assorted fresh cookies (about 2 per person for a team of 12 to 15)</li><li>Platter or gift-box presentation, ready to put out</li><li>Delivery to one Toronto office, timed to your event</li><li>Dietary notes (nut-free, vegan options) passed to the bakery</li></ul>
 <h2>Best for</h2><p>Holiday parties, team lunches, reception desks and client meetings.</p>
 <h2>How ordering works</h2>
-<ol class="steps"><li>Send the order form (2 minutes).</li><li>We confirm the bakery, date and final price within one business day.</li><li>You pay by card through a secure Stripe link. Nothing is ordered before payment.</li><li>We place the order, add cards and confirm delivery.</li></ol>
+<ol class="order-steps"><li>Send the order form (2 minutes).</li><li>We confirm the bakery, date and final price within one business day.</li><li>You pay by card through a secure Stripe link. Nothing is ordered before payment.</li><li>We place the order, add cards and confirm delivery.</li></ol>
 <h2>Questions</h2><details><summary>What&#x27;s the deadline to order holiday cookie gifts for 2026?</summary><p>Order by Wednesday, December 9, 2026 for delivery by Friday, December 18, 2026. Later orders are handled on a best-effort basis depending on bakery capacity, so ask as early as you can.</p></details>
 <details><summary>How do I pay?</summary><p>After we confirm your order, you pay by card through a secure Stripe payment link or invoice. Nothing is ordered from the bakery until your payment is complete.</p></details>
 <details><summary>Where do you deliver?</summary><p>Delivery within the City of Toronto is included in the package prices. Elsewhere in the GTA (Mississauga, Markham, Vaughan, Richmond Hill and more) is quoted per order.</p></details>
@@ -185,9 +191,20 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 <p>Other packages: <a href="/holiday-cookie-gift-box-toronto/">Single Holiday Cookie Gift</a> · <a href="/client-cookie-gift-pack-toronto/">Client Gift Pack (10 boxes)</a> · <a href="/logo-cookies-toronto/">Custom Logo Cookies</a></p>
 </main>
 <footer class="site-footer"><div class="wrap">
-<p><strong>Toronto Cookies</strong> is a corporate and holiday cookie gifting concierge serving Toronto and the GTA. We source from licensed, inspected Toronto bakeries; we do not bake or handle food ourselves.</p>
-<p><a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a> · <a href="/office-cookie-tray-toronto/">Office tray $129</a> · <a href="/client-cookie-gift-pack-toronto/">Client pack $590</a> · <a href="/logo-cookies-toronto/">Logo cookies</a> · <a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a> · <a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a> · <a href="/about/">About</a></p>
-<p>Questions: <a href="mailto:orders@torontocookies.ca">orders@torontocookies.ca</a> · Prices in CAD · © 2026 Toronto Cookies</p>
+<p class="footer-brand">Toronto Cookies</p>
+<p>A corporate and holiday cookie gifting concierge for Toronto and the GTA. We source from licensed, inspected Toronto bakeries. We do not bake or handle food ourselves.</p>
+<nav aria-label="Footer">
+<a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a>
+<a href="/office-cookie-tray-toronto/">Office tray $129</a>
+<a href="/client-cookie-gift-pack-toronto/">Client pack $590</a>
+<a href="/logo-cookies-toronto/">Logo cookies</a>
+<a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a>
+<a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a>
+<a href="/about/">About</a>
+<a href="/faq/">FAQ</a>
+<a href="/order/">Order</a>
+</nav>
+<p class="fine">Questions: <a href="mailto:orders@torontocookies.ca">orders@torontocookies.ca</a> · Prices in CAD · © 2026 Toronto Cookies</p>
 </div></footer>
 <script src="/assets/site.js" defer></script>
 </body>
