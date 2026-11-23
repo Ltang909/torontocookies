@@ -829,9 +829,10 @@ jobs:
           temporaryPublicStorage: true
 """
 
-# The Hostinger FTP user is rooted at public_html (the live site), not inside staging.
-# server-dir must be staging/ so uploads land in public_html/staging/.
-# The sync state file is server-dir + state-name, so it stays inside that folder.
+# The Hostinger FTP user (u916429614) is rooted at /home/u916429614, not public_html.
+# server-dir must be domains/torontocookies.ca/public_html/staging/ so uploads land in the
+# subdomain document root. Never ./, /, public_html/, or domains/torontocookies.ca/public_html/.
+# The sync state file is server-dir + state-name, so it stays inside that staging folder.
 # dangerous-clean-slate stays false: the action must not wipe the server folder.
 DEPLOY_STAGING = r"""name: Deploy staging
 on:
@@ -858,14 +859,14 @@ jobs:
             echo "::notice::FTP secrets are not set (FTP_SERVER, FTP_USERNAME, FTP_PASSWORD). Skipping the staging deploy."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
-            echo "FTP secrets are present. Deploying into staging/ only."
+            echo "FTP secrets are present. Deploying into domains/torontocookies.ca/public_html/staging/ only."
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/checkout@v4
         if: steps.ftp.outputs.ready == 'true'
 
-      - name: Deploy into public_html/staging over FTPS
+      - name: Deploy into domains/torontocookies.ca/public_html/staging over FTPS
         if: steps.ftp.outputs.ready == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -875,9 +876,9 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./
-          # Relative to the FTP root (public_html). Never "./" — that is the live site.
-          server-dir: staging/
-          # Stored at staging/.ftp-deploy-sync-state.json. Deletes only paths listed there.
+          # Relative to /home/u916429614. Never ./, /, public_html/, or the production public_html root.
+          server-dir: domains/torontocookies.ca/public_html/staging/
+          # Stored inside that staging folder. Deletes only paths listed there.
           state-name: .ftp-deploy-sync-state.json
           dangerous-clean-slate: false
           exclude: |
@@ -937,7 +938,7 @@ Static site for **Toronto Cookies**, a corporate and holiday cookie gifting conc
 * `_legacy-2022/` is the backup of the 2022 page (blocked from the web by `.htaccess`).
 * Photo and type credits are in `CREDITS.md`, also blocked by the markdown rule.
 * Bare-domain HTTPS is Hostinger's Force HTTPS setting. `.htaccess` only redirects `www` to the apex, so `staging.*` is left alone (noindex header and `robots-staging.txt` still apply there).
-* A push to `staging` deploys into `public_html/staging/` over FTPS (the FTP account is rooted at `public_html`). Missing secrets skip the deploy.
+* A push to `staging` deploys into `domains/torontocookies.ca/public_html/staging/` over FTPS (the FTP account is rooted at the home directory). Missing secrets skip the deploy.
 """
 
 CREDITS = """# Credits

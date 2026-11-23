@@ -11,4 +11,4 @@ Static site for **Toronto Cookies**, a corporate and holiday cookie gifting conc
 * `_legacy-2022/` is the backup of the 2022 page (blocked from the web by `.htaccess`).
 * Photo and type credits are in `CREDITS.md`, also blocked by the markdown rule.
 * Bare-domain HTTPS is Hostinger's Force HTTPS setting. `.htaccess` only redirects `www` to the apex, so `staging.*` is left alone (noindex header and `robots-staging.txt` still apply there).
-* A push to `staging` deploys into `public_html/staging/` over FTPS (the FTP account is rooted at `public_html`). Missing secrets skip the deploy.
+* A push to `staging` deploys into `domains/torontocookies.ca/public_html/staging/` over FTPS (the FTP account is rooted at the home directory). Missing secrets skip the deploy.
