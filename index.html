@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_CA">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="preload" as="image" href="/assets/hero-800.webp" imagesrcset="/assets/hero-800.webp 800w, /assets/hero.webp 1400w" imagesizes="(min-width: 720px) 46vw, 100vw" fetchpriority="high">
+<link rel="preload" as="image" href="/assets/hero-800.webp" imagesrcset="/assets/hero-800.webp 800w, /assets/hero.webp 1600w" imagesizes="100vw" fetchpriority="high">
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {
@@ -237,22 +237,21 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div class="announce"><p>Order by Wednesday, December 9, 2026 for delivery by Friday, December 18, 2026.</p></div>
 <header class="site-header"><div class="wrap">
-<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> <span>Toronto Cookies</span></a>
+<a class="brand" href="/">Toronto Cookies</a>
 <nav aria-label="Main"><a href="/" aria-current="page">Home</a><a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a><a href="/faq/">FAQ</a><a href="/order/">Order / quote</a></nav>
 </div></header>
 <main id="main">
-<section class="hero">
-<div class="wrap hero-grid">
-<div>
-<p class="eyebrow">Toronto corporate gifting</p>
+<section class="cookie-hero">
+<img src="/assets/hero.webp" srcset="/assets/hero-800.webp 800w, /assets/hero.webp 1600w" sizes="100vw" alt="A close-up of chocolate chunk cookies broken open on parchment" width="1600" height="800" fetchpriority="high" decoding="async">
+</section>
+<section class="intro"><div class="wrap">
+<p class="kicker">The cookies</p>
 <h1>Corporate &amp; holiday cookie gifts in Toronto, done for you</h1>
 <p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
 <p class="cta-row"><a class="btn" href="#packages">See gift packages</a> <a class="btn btn-ghost" href="/order/" data-track="hero_cta_clicked">Get a quote</a></p>
-</div>
-<figure class="hero-photo"><img src="/assets/hero.webp" srcset="/assets/hero-800.webp 800w, /assets/hero.webp 1400w" sizes="(min-width: 720px) 46vw, 100vw" alt="Chocolate chunk cookies broken open on parchment paper" width="1400" height="1050" fetchpriority="high" decoding="async"></figure>
-</div>
-</section>
+</div></section>
 <section class="trust" aria-label="Why offices use Toronto Cookies">
 <div class="wrap">
 <ul class="trust-row">
@@ -264,10 +263,11 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </div>
 </section>
 <section id="packages" class="band"><div class="wrap">
+<p class="kicker">Four ways to send them</p>
 <h2>Gift packages</h2>
 <p class="section-lead">Fixed prices in Canadian dollars. City of Toronto delivery is included.</p>
 <div class="grid"><article class="card">
-<img src="/assets/gift-box.webp" alt="A kraft holiday gift tied with baker&#x27;s twine, held out to give" width="1100" height="825" loading="lazy" decoding="async">
+<img src="/assets/gift-box.webp" alt="A tall stack of chocolate chip cookies" width="933" height="933" loading="lazy" decoding="async">
 <div class="card-body">
 <h3><a href="/holiday-cookie-gift-box-toronto/">Single Holiday Cookie Gift</a></h3>
 <p class="price">$59<span> CAD</span></p>
@@ -276,7 +276,7 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </div>
 </article>
 <article class="card">
-<img src="/assets/office-tray.webp" alt="A parchment-lined bowl filled with chocolate chip cookies to share" width="1100" height="825" loading="lazy" decoding="async">
+<img src="/assets/office-tray.webp" alt="A parchment-lined bowl filled with chocolate chip cookies to share" width="1000" height="1000" loading="lazy" decoding="async">
 <div class="card-body">
 <h3><a href="/office-cookie-tray-toronto/">Office Holiday Cookie Tray</a></h3>
 <p class="price">$129<span> CAD</span></p>
@@ -285,7 +285,7 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </div>
 </article>
 <article class="card">
-<img src="/assets/client-gifts.webp" alt="A pile of wrapped holiday gifts in red, white, and gold" width="1100" height="825" loading="lazy" decoding="async">
+<img src="/assets/client-gifts.webp" alt="Gingerbread people and snowflake cookies cooling on a rack" width="933" height="933" loading="lazy" decoding="async">
 <div class="card-body">
 <h3><a href="/client-cookie-gift-pack-toronto/">Client Gift Pack (10 boxes)</a></h3>
 <p class="price">$590<span> CAD</span></p>
@@ -294,7 +294,7 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </div>
 </article>
 <article class="card">
-<img src="/assets/logo-cookies.webp" alt="Rows of hand-decorated cookies finished with icing and fruit" width="1100" height="825" loading="lazy" decoding="async">
+<img src="/assets/logo-cookies.webp" alt="Iced sugar cookies in stars, trees, and a heart, with sprinkles" width="1000" height="1000" loading="lazy" decoding="async">
 <div class="card-body">
 <h3><a href="/logo-cookies-toronto/">Custom Logo Cookies</a></h3>
 <p class="price">Bakery cost + 20% (from $79)<span> CAD</span></p>
@@ -312,9 +312,9 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </ol>
 </div></section>
 <section class="upsell"><div class="wrap upsell-grid">
-<img src="/assets/logo-cookies.webp" alt="Rows of hand-decorated cookies finished with icing and fruit" width="1100" height="825" loading="lazy" decoding="async">
+<img src="/assets/logo-cookies.webp" alt="Iced sugar cookies in stars, trees, and a heart, with sprinkles" width="1000" height="1000" loading="lazy" decoding="async">
 <div>
-<p class="eyebrow">For when the brand should show</p>
+<p class="kicker">Put the name on the cookie</p>
 <h2>Cookies with your logo</h2>
 <p>Printed in edible ink or hand-iced by a Toronto specialist, usually with a free mock-up first. The price is the bakery's quote plus a 20% concierge fee, from $79.</p>
 <p><a class="btn" href="/logo-cookies-toronto/" data-track="package_viewed_from_card" data-package="logo-cookies">See logo cookies</a></p>

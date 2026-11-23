@@ -48,8 +48,8 @@ PACKAGES = [
                      "Delivery to one address in the City of Toronto",
                      "Nut-free option on request (sourced from a nut-free bakery)"],
         "best_for": "A thank-you to one client, a host gift, or a colleague you can't see in person.",
-        "image": "/assets/gift-box.webp", "iw": 1100, "ih": 825,
-        "alt": "A kraft holiday gift tied with baker's twine, held out to give",
+        "image": "/assets/gift-box.webp", "iw": 933, "ih": 933,
+        "alt": "A tall stack of chocolate chip cookies",
     },
     {
         "id": "office-tray", "slug": "office-cookie-tray-toronto",
@@ -61,7 +61,7 @@ PACKAGES = [
                      "Delivery to one Toronto office, timed to your event",
                      "Dietary notes (nut-free, vegan options) passed to the bakery"],
         "best_for": "Holiday parties, team lunches, reception desks and client meetings.",
-        "image": "/assets/office-tray.webp", "iw": 1100, "ih": 825,
+        "image": "/assets/office-tray.webp", "iw": 1000, "ih": 1000,
         "alt": "A parchment-lined bowl filled with chocolate chip cookies to share",
     },
     {
@@ -75,8 +75,8 @@ PACKAGES = [
                      "One delivery-status summary email when every box has landed",
                      "Need 20, 50 or 100? Add packs or ask for a quote"],
         "best_for": "Law, accounting, real-estate and agency teams thanking their best clients.",
-        "image": "/assets/client-gifts.webp", "iw": 1100, "ih": 825,
-        "alt": "A pile of wrapped holiday gifts in red, white, and gold",
+        "image": "/assets/client-gifts.webp", "iw": 933, "ih": 933,
+        "alt": "Gingerbread people and snowflake cookies cooling on a rack",
     },
     {
         "id": "logo-cookies", "slug": "logo-cookies-toronto",
@@ -88,15 +88,15 @@ PACKAGES = [
                      "Optional gift boxes, cards and multi-address delivery",
                      "Transparent pricing: bakery quote + 20% concierge fee, $79 minimum"],
         "best_for": "Client gifts, conferences, launches and holiday parties where your brand should show.",
-        "image": "/assets/logo-cookies.webp", "iw": 1100, "ih": 825,
-        "alt": "Rows of hand-decorated cookies finished with icing and fruit",
+        "image": "/assets/logo-cookies.webp", "iw": 1000, "ih": 1000,
+        "alt": "Iced sugar cookies in stars, trees, and a heart, with sprinkles",
     },
 ]
 
-HERO = {"src": "/assets/hero.webp", "w": 1400, "h": 1050,
-        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1400w",
-        "sizes": "(min-width: 720px) 46vw, 100vw",
-        "alt": "Chocolate chunk cookies broken open on parchment paper"}
+HERO = {"src": "/assets/hero.webp", "w": 1600, "h": 800,
+        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1600w",
+        "sizes": "100vw",
+        "alt": "A close-up of chocolate chunk cookies broken open on parchment"}
 
 FAQ = [
     ("How does Toronto Cookies work?",
@@ -253,8 +253,9 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div class="announce"><p>Order by {CONFIG["ORDER_BY"]} for delivery by {CONFIG["DELIVER_BY"]}.</p></div>
 <header class="site-header"><div class="wrap">
-<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> <span>Toronto Cookies</span></a>
+<a class="brand" href="/">Toronto Cookies</a>
 <nav aria-label="Main">{nav}</nav>
 </div></header>
 <main id="main"{main_attr}>
@@ -312,17 +313,15 @@ def build_pages():
 
     # Home
     logo = next(p for p in PACKAGES if p["id"] == "logo-cookies")
-    body = f"""<section class="hero">
-<div class="wrap hero-grid">
-<div>
-<p class="eyebrow">Toronto corporate gifting</p>
+    body = f"""<section class="cookie-hero">
+<img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async">
+</section>
+<section class="intro"><div class="wrap">
+<p class="kicker">The cookies</p>
 <h1>Corporate &amp; holiday cookie gifts in Toronto, done for you</h1>
 <p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
 <p class="cta-row"><a class="btn" href="#packages">See gift packages</a> <a class="btn btn-ghost" href="/order/" data-track="hero_cta_clicked">Get a quote</a></p>
-</div>
-<figure class="hero-photo"><img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async"></figure>
-</div>
-</section>
+</div></section>
 <section class="trust" aria-label="Why offices use Toronto Cookies">
 <div class="wrap">
 <ul class="trust-row">
@@ -334,6 +333,7 @@ def build_pages():
 </div>
 </section>
 <section id="packages" class="band"><div class="wrap">
+<p class="kicker">Four ways to send them</p>
 <h2>Gift packages</h2>
 <p class="section-lead">Fixed prices in Canadian dollars. City of Toronto delivery is included.</p>
 <div class="grid">{cards}</div>
@@ -349,7 +349,7 @@ def build_pages():
 <section class="upsell"><div class="wrap upsell-grid">
 <img src="{logo['image']}" alt="{e(logo['alt'])}" width="{logo['iw']}" height="{logo['ih']}" loading="lazy" decoding="async">
 <div>
-<p class="eyebrow">For when the brand should show</p>
+<p class="kicker">Put the name on the cookie</p>
 <h2>Cookies with your logo</h2>
 <p>Printed in edible ink or hand-iced by a Toronto specialist, usually with a free mock-up first. The price is the bakery's quote plus a 20% concierge fee, from $79.</p>
 <p><a class="btn" href="/logo-cookies-toronto/" data-track="package_viewed_from_card" data-package="logo-cookies">See logo cookies</a></p>
@@ -542,99 +542,98 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
 
 CSS = """@font-face{font-family:Fraunces;font-style:normal;font-weight:560;font-display:swap;src:url("/assets/fonts/fraunces-latin.woff2") format("woff2")}
 @font-face{font-family:Fraunces;font-style:normal;font-weight:650;font-display:swap;src:url("/assets/fonts/fraunces-latin.woff2") format("woff2")}
-@font-face{font-family:Outfit;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/outfit-latin.woff2") format("woff2")}
-@font-face{font-family:Outfit;font-style:normal;font-weight:500;font-display:swap;src:url("/assets/fonts/outfit-latin.woff2") format("woff2")}
-@font-face{font-family:Outfit;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/outfit-latin.woff2") format("woff2")}
-:root{--cream:#f6f0e6;--paper:#fffdf9;--ink:#2c1810;--burgundy:#6e2e33;--burgundy-d:#542226;--muted:#5c4a42;--line:#e6d8c8;--gold:#74532c;--serif:Fraunces,Iowan Old Style,Palatino,Georgia,serif;--sans:Outfit,Avenir Next,Segoe UI,sans-serif}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/poppins-600.woff2") format("woff2")}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/poppins-700.woff2") format("woff2")}
+:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--serif:Fraunces,Iowan Old Style,Palatino,Georgia,serif;--sans:Poppins,Avenir Next,Segoe UI,sans-serif}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;font:17px/1.65 var(--sans);background:var(--cream);color:var(--ink)}
+body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink)}
 img{max-width:100%;height:auto;display:block}
-a{color:var(--burgundy)}
-:focus-visible{outline:3px solid var(--burgundy);outline-offset:3px}
-.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
 .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:10px 14px;z-index:9}
-.site-header{background:rgba(255,253,249,.92);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:4}
-.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 18px;padding-top:12px;padding-bottom:12px}
-.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-family:var(--serif);font-weight:650;font-size:22px;letter-spacing:-.02em}
-.brand img{width:48px;height:48px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px #e4cba3}
+.announce{background:var(--pink);color:#fff;text-align:center}
+.announce p{margin:0;padding:10px 16px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.site-header{background:var(--cream);border-bottom:1px solid var(--line)}
+.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding-top:16px;padding-bottom:14px}
+.brand{font-family:var(--serif);font-weight:650;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
 .site-header nav{display:flex;flex-wrap:wrap;gap:4px}
-.site-header nav a{text-decoration:none;font-weight:500;color:var(--ink);padding:10px 12px;border-radius:999px;min-height:44px}
-.site-header nav a[aria-current]{background:#f3e6d4;text-decoration:underline;text-underline-offset:4px}
-.page{padding:36px 22px 72px}
-h1,h2,h3{font-family:var(--serif);font-weight:560;letter-spacing:-.02em;line-height:1.15}
-h1{font-size:clamp(34px,6vw,60px);margin:.2em 0 .35em}
-h2{font-size:clamp(28px,3.5vw,40px);margin:0 0 .4em}
-h3{font-size:22px;margin:0 0 .3em}
-.eyebrow{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--gold);margin:0 0 10px}
-.lede{font-size:18.5px;max-width:42rem}
-.section-lead{color:var(--muted);margin-top:0}
-.hero{padding:28px 0 36px}
-.hero-grid{display:grid;gap:28px;align-items:center}
-.hero-photo{margin:0}
-.hero-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:28px;box-shadow:0 18px 50px rgba(44,24,16,.14)}
-.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;background:var(--burgundy);color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600;border:2px solid var(--burgundy);cursor:pointer;font-size:16px}
-.btn:hover{background:var(--burgundy-d)}
-.btn-ghost{background:transparent;color:var(--burgundy)}
-.btn-ghost:hover{background:#fff}
-.btn-small{min-height:44px;padding:8px 16px;font-size:15px}
-.trust{padding:8px 0 28px}
-.trust-row{list-style:none;margin:0;padding:18px 0;display:grid;gap:18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
+.site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
+.site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
+.page{padding:28px 20px 64px}
+h1,h2,h3{font-family:var(--serif);font-weight:650;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
+h1{font-size:clamp(44px,8vw,88px);margin:0 0 .25em;max-width:14ch}
+h2{font-size:clamp(32px,4vw,52px);margin:0 0 .35em}
+h3{font-size:26px;margin:0 0 .25em}
+.kicker,.eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin:0 0 12px}
+.lede{font-size:18px;max-width:40rem}
+.section-lead{margin-top:0}
+.cookie-hero img{width:100%;height:auto;aspect-ratio:2/1;object-fit:cover}
+.intro{padding:36px 0 10px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;background:var(--pink);color:#fff;padding:14px 22px;border-radius:2px;text-decoration:none;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:14px;border:2px solid var(--pink);cursor:pointer}
+.btn:hover{background:var(--pink-d);border-color:var(--pink-d);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:#fff}
+.btn-small{min-height:46px;padding:10px 14px;font-size:12px}
+.trust{padding:8px 0 20px}
+.trust-row{list-style:none;margin:0;padding:8px 0 4px;display:grid;gap:16px}
 .trust-row li{display:grid;gap:4px}
-.trust-row strong{font-family:var(--serif);font-size:18px;font-weight:560}
+.trust-row strong{font-size:14px;letter-spacing:.06em;text-transform:uppercase}
 .trust-row span{color:var(--muted);font-size:15px}
-.band{padding:28px 0 10px}
-.how,.upsell,.faq-teaser{padding:18px 0 8px}
-.grid{display:grid;grid-template-columns:1fr;gap:18px}
-.card{background:var(--paper);border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(44,24,16,.06);border:1px solid var(--line);display:flex;flex-direction:column}
-.card img{width:100%;aspect-ratio:4/3;object-fit:cover}
-.card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
-.card h3{margin:0}.card h3 a{color:var(--ink);text-decoration:none}
+.band{padding:18px 0 8px}
+.how,.upsell,.faq-teaser{padding:12px 0}
+.grid{display:grid;grid-template-columns:1fr;gap:28px}
+.card{background:transparent;display:flex;flex-direction:column;gap:12px}
+.card img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.card-body{display:flex;flex-direction:column;gap:8px;padding:0}
+.card h3{font-size:22px;text-transform:uppercase;letter-spacing:-.02em}
+.card h3 a{color:var(--ink);text-decoration:none}
 .card h3 a:hover{text-decoration:underline}
 .card p{margin:0}
-.price{font-family:var(--serif);font-size:28px;font-weight:650;margin:0}
-.price span{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--muted)}
-.card .btn{margin-top:auto;align-self:flex-start}
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:14px}
-.steps li{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 18px 8px;box-shadow:0 8px 24px rgba(44,24,16,.04)}
-.steps p{color:var(--muted)}
-.order-steps li{margin:8px 0}
-.upsell-grid{display:grid;gap:22px;align-items:center;background:var(--paper);border-radius:28px;padding:18px;border:1px solid var(--line);box-shadow:0 12px 36px rgba(44,24,16,.06)}
-.upsell-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:18px}
-.deadline{padding:22px 0}
-.notice{background:#fff8ee;border:1px solid #e4cba3;border-left:4px solid var(--gold);padding:14px 18px;border-radius:16px;margin:0}
-.product-intro{display:grid;gap:22px;margin-bottom:10px}
+.price{font-family:var(--serif);font-size:32px;font-weight:650;margin:0}
+.price span{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.08em}
+.card .btn{margin-top:6px;align-self:flex-start}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.steps li{padding-top:8px}
+.steps p{margin:.3em 0 0;color:var(--muted)}
+.upsell-grid{display:grid;gap:22px;align-items:center}
+.upsell-grid img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.deadline{padding:28px 0}
+.notice{background:#fff;border:2px solid var(--ink);padding:16px 18px;margin:0}
+.product-intro{display:grid;gap:22px;align-items:center;margin-bottom:12px}
 .product-photo{margin:0}
-.product-photo img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:24px;box-shadow:0 16px 40px rgba(44,24,16,.12)}
-.text-link{font-weight:600}
-table{border-collapse:collapse;width:100%;background:var(--paper);margin:12px 0;border-radius:12px;overflow:hidden}
-th,td{border-bottom:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
-th{background:#f3e6d4;font-weight:600}
-details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:10px 0}
-summary{font-weight:600;cursor:pointer;min-height:44px;display:flex;align-items:center}
+.product-photo img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.text-link{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+table{border-collapse:collapse;width:100%;background:#fff;margin:12px 0}
+th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}
+th{font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+details{background:#fff;border-bottom:1px solid var(--line);padding:8px 0;margin:0}
+summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:center}
 .order{display:grid;gap:14px;max-width:640px}
 .order label{display:grid;gap:6px;font-weight:600}
-.order input,.order select,.order textarea{font:16px/1.4 var(--sans);padding:12px;border:1px solid #d9c4b0;border-radius:12px;background:#fff;min-height:48px}
+.order input,.order select,.order textarea{font:16px/1.4 var(--sans);padding:12px;border:2px solid var(--ink);border-radius:0;background:#fff;min-height:48px}
 .hp{position:absolute;left:-5000px}
-.small,.fine{font-size:14px;color:var(--muted)}
-.crumbs{font-size:14px;color:var(--muted)}
-.buy{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-.site-footer{background:#3b2422;color:#f6f0e6;padding:36px 0 28px;margin-top:28px}
-.site-footer a{color:#f6f0e6}
-.footer-brand{font-family:var(--serif);font-size:26px;font-weight:650;margin:0 0 8px}
-.site-footer nav{display:flex;flex-wrap:wrap;gap:8px 16px;margin:16px 0}
-.site-footer nav a{text-underline-offset:3px}
-.site-footer .fine{color:#f3e6d4}
-@media(min-width:720px){
-.trust-row{grid-template-columns:1fr 1fr}
-.grid{grid-template-columns:1fr 1fr}
-.steps-3{grid-template-columns:1fr 1fr 1fr}
-.hero{padding:48px 0 20px}
-.hero-grid{grid-template-columns:1.05fr .95fr;gap:48px}
-.product-intro{grid-template-columns:.9fr 1.1fr;align-items:center;gap:36px}
-.upsell-grid{grid-template-columns:.9fr 1.1fr;padding:28px;gap:36px}
+.small,.fine{font-size:14px}
+.crumbs{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.buy{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.site-footer{background:#111;color:#fbf6f1;padding:42px 0 28px;margin-top:36px}
+.site-footer a{color:#fbf6f1}
+.footer-brand{font-family:var(--serif);font-size:36px;font-weight:650;margin:0 0 8px;letter-spacing:-.03em}
+.site-footer nav{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0}
+.site-footer nav a{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-underline-offset:4px}
+.site-footer .fine{color:#fbf6f1}
+.order-steps li{margin:8px 0}
+@media(min-width:800px){
+.trust-row{grid-template-columns:repeat(4,1fr);gap:22px}
+.grid{grid-template-columns:1fr 1fr;gap:32px 28px}
+.steps-3{grid-template-columns:1fr 1fr 1fr;gap:28px}
+.intro{padding:56px 0 12px}
+.upsell-grid{grid-template-columns:1fr 1fr;gap:48px}
+.product-intro{grid-template-columns:1.05fr .95fr;gap:48px}
+.product-photo{order:2}
 }
-@media(max-width:719px){.steps-3{grid-template-columns:1fr}}
 """
 
 JS = """(function(){
@@ -940,19 +939,19 @@ Photographs and typefaces used on torontocookies.ca. This file is blocked from t
 
 ## Photographs
 
-Used under the [Unsplash License](https://unsplash.com/license). The license does not require attribution. The source address is the photo's file on Unsplash, which identifies the photographer.
+Most photographs are used under the [Unsplash License](https://unsplash.com/license). The iced sugar cookies are from Wikimedia Commons under CC BY-SA 3.0. This WebP crop is shared under the same licence.
 
 | File | What it shows | Source |
 | --- | --- | --- |
-| `assets/hero.webp` | Chocolate chunk cookies on parchment | https://images.unsplash.com/photo-1499636136210-6f4ee915583e |
-| `assets/gift-box.webp` | A kraft holiday gift held out to give | https://images.unsplash.com/photo-1512909006721-3d6018887383 |
+| `assets/hero.webp` | Close-up of chocolate chunk cookies | https://images.unsplash.com/photo-1499636136210-6f4ee915583e |
+| `assets/gift-box.webp` | A stack of chocolate chip cookies | https://images.unsplash.com/photo-1548365328-8c6db3220e4c |
 | `assets/office-tray.webp` | Cookies in a parchment-lined bowl | https://images.unsplash.com/photo-1558961363-fa8fdf82db35 — Mae Mu |
-| `assets/client-gifts.webp` | Wrapped holiday gifts | https://images.unsplash.com/photo-1513885535751-8b9238bd345a |
-| `assets/logo-cookies.webp` | Hand-decorated cookies | https://images.unsplash.com/photo-1495147466023-ac5c588e2e94 |
+| `assets/client-gifts.webp` | Gingerbread people and snowflakes | https://images.unsplash.com/photo-1639590229762-3c9a8c98ca31 |
+| `assets/logo-cookies.webp` | Iced sugar cookies with sprinkles | https://commons.wikimedia.org/wiki/File:Decorated_sugar_cookies.jpg — Julie Anne Workman, CC BY-SA 3.0 |
 
 ## Type
 
-Fraunces and Outfit, designed for Google Fonts and used under the SIL Open Font License. The Latin woff2 files are self-hosted in `assets/fonts/` so the pages do not call fonts.googleapis.com.
+Fraunces and Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files are self-hosted in `assets/fonts/`.
 """
 
 def write(rel, content, mode="w"):
@@ -989,7 +988,7 @@ def check():
     req = ["index.html", "404.html", ".htaccess", "robots.txt", "robots-staging.txt", "sitemap.xml", "llms.txt",
            "CREDITS.md", "assets/site.css", "assets/site.js", "assets/logo.png",
            "assets/hero.webp", "assets/hero-800.webp", "assets/gift-box.webp", "assets/office-tray.webp", "assets/client-gifts.webp", "assets/logo-cookies.webp",
-           "assets/fonts/fraunces-latin.woff2", "assets/fonts/outfit-latin.woff2",
+           "assets/fonts/fraunces-latin.woff2", "assets/fonts/poppins-600.woff2", "assets/fonts/poppins-700.woff2",
            "_legacy-2022/index.html", "_legacy-2022/assets/torontocookies.jpg"]
     for r in req:
         if not os.path.exists(os.path.join(ROOT, r)):
