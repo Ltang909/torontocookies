@@ -245,7 +245,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 {preload_tag}
-<link rel="stylesheet" href="/assets/site.css?v=3">
+<link rel="stylesheet" href="/assets/site.css?v=4">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -313,13 +313,16 @@ def build_pages():
 
     # Home
     logo = next(p for p in PACKAGES if p["id"] == "logo-cookies")
-    body = f"""<section class="cookie-hero">
-<img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async">
-</section>
-<section class="intro"><div class="wrap">
-<h1>Corporate &amp; holiday cookie gifts in Toronto, done for you</h1>
-<p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
-<p class="cta-row"><a class="btn" href="#packages">See gift packages</a> <a class="btn btn-ghost" href="/order/" data-track="hero_cta_clicked">Get a quote</a></p>
+    body = f"""<section class="hero"><div class="wrap hero-grid">
+<div>
+<h1>Corporate cookie gifts for Toronto teams and clients</h1>
+<p class="lede">Client gifts, office trays, holiday thank-yous and logo cookies, delivered across the GTA.</p>
+<p class="cta-row"><a class="btn" href="/order/" data-track="hero_cta_clicked">Order corporate gifts</a> <a class="btn btn-ghost" href="#packages">See packages</a></p>
+</div>
+<figure class="hero-visual"><img src="{logo['image']}" alt="{e(logo['alt'])}" width="{logo['iw']}" height="{logo['ih']}" fetchpriority="high" decoding="async"></figure>
+</div></section>
+<section class="proof" aria-label="Ordering facts"><div class="wrap">
+<p>Prepaid via Stripe · City of Toronto delivery included, GTA quoted · Order by {CONFIG["ORDER_BY"]}</p>
 </div></section>
 <section class="trust" aria-label="Why offices use Toronto Cookies">
 <div class="wrap">
@@ -361,8 +364,7 @@ def build_pages():
     out["index.html"] = page("/", "Corporate & Holiday Cookie Gifts Toronto | Toronto Cookies",
         "Corporate and holiday cookie gifts delivered across Toronto from top local bakeries. Single gifts $59, office trays $129, 10 client gifts $590. Order by Dec 9.",
         body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES],
-        preload="/assets/hero-800.webp", bleed=True,
-        preload_srcset=HERO["srcset"], preload_sizes=HERO["sizes"])
+        preload=logo["image"], bleed=True)
 
     # Corporate hub
     body = f"""<h1>Corporate cookie gifts in Toronto</h1>
@@ -557,28 +559,33 @@ a{color:var(--ink)}
 .site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
 .site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
 .site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
-.page{padding:28px 0 64px}
+.page{padding:40px 0 90px}
 h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
 h1{font-size:clamp(44px,8vw,88px);margin:0 0 .25em;max-width:14ch}
 h2{font-size:clamp(32px,4vw,52px);margin:0 0 .4em}
 h3{font-size:26px;margin:0 0 .25em}
 .lede,.section-lead,.upsell p,.page > p{font-size:18px;max-width:70ch}
 .section-lead{margin-top:0}
-.cookie-hero img{width:100%;height:auto;aspect-ratio:2/1;object-fit:cover}
-.intro{padding:36px 0 10px}
+.hero{padding:22px 0 6px}
+.hero-grid{display:grid;gap:16px;align-items:center}
+.hero-visual{margin:0}
+.hero-visual img{width:100%;height:150px;object-fit:cover}
+.hero h1{font-size:clamp(32px,5vw,56px);max-width:18ch}
+.proof{padding:10px 0 4px}
+.proof p{margin:0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px;font-weight:600;max-width:none}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;background:var(--pink);color:#fff;padding:14px 22px;border-radius:2px;text-decoration:none;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:14px;border:2px solid var(--pink);cursor:pointer}
 .btn:hover{background:var(--pink-d);border-color:var(--pink-d);color:#fff}
 .btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:#fff}
 .btn-small{min-height:46px;padding:10px 14px;font-size:12px}
-.trust{padding:8px 0 20px}
+.trust{padding:16px 0 32px}
 .trust-row{list-style:none;margin:0;padding:8px 0 4px;display:grid;gap:16px}
 .trust-row li{display:grid;gap:4px}
 .trust-row strong{font-size:14px;letter-spacing:.06em;text-transform:uppercase}
 .trust-row span{color:var(--muted);font-size:15px}
-.band{padding:18px 0 8px}
-.how,.upsell,.faq-teaser{padding:12px 0}
+.band{padding:28px 0 16px}
+.how,.upsell,.faq-teaser{padding:22px 0}
 .grid{display:grid;grid-template-columns:1fr;gap:28px}
 .card{background:transparent;display:flex;flex-direction:column;gap:12px}
 .card img{width:100%;aspect-ratio:1/1;object-fit:cover}
@@ -595,7 +602,7 @@ h3{font-size:26px;margin:0 0 .25em}
 .steps p{margin:.3em 0 0;color:var(--muted)}
 .upsell-grid{display:grid;gap:22px;align-items:center}
 .upsell-grid img{width:100%;aspect-ratio:1/1;object-fit:cover}
-.deadline{padding:28px 0}
+.deadline{padding:42px 0}
 .notice{background:#fff;border:2px solid var(--ink);padding:16px 18px;margin:0}
 .product-intro{display:grid;gap:22px;align-items:center;margin-bottom:12px}
 .product-photo{margin:0}
@@ -613,7 +620,7 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .small,.fine{font-size:14px}
 .crumbs{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 .buy{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
-.site-footer{background:#111;color:#fbf6f1;padding:42px 0 28px;margin-top:36px}
+.site-footer{background:#111;color:#fbf6f1;padding:56px 0 36px;margin-top:52px}
 .site-footer a{color:#fbf6f1}
 .footer-brand{font-family:var(--sans);font-size:36px;font-weight:700;margin:0 0 8px;letter-spacing:-.03em}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0}
@@ -624,8 +631,10 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .trust-row{grid-template-columns:repeat(4,1fr);gap:22px}
 .grid{grid-template-columns:1fr 1fr;gap:32px 28px}
 .steps-3{grid-template-columns:1fr 1fr 1fr;gap:28px}
-.intro{padding:56px 0 12px}
-.upsell-grid{grid-template-columns:1fr 1fr;gap:48px}
+.hero{padding:28px 0 8px}
+.hero-grid{grid-template-columns:1.15fr .85fr;gap:36px}
+.hero-visual img{height:340px}
+.upsell-grid{grid-template-columns:1fr 1fr;gap:64px}
 .product-intro{grid-template-columns:1.05fr .95fr;gap:48px}
 .product-photo{order:2}
 }
