@@ -16,4 +16,4 @@ Most photographs are used under the [Unsplash License](https://unsplash.com/lice
 
 ## Type
 
-Fraunces and Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files are self-hosted in `assets/fonts/`.
+Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files (400, 600, 700) are self-hosted in `assets/fonts/`.

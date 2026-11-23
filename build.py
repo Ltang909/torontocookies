@@ -540,11 +540,10 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
         "<h1>That page crumbled</h1><p>Try the <a href='/'>home page</a>, our <a href='/corporate-cookie-gifts-toronto/'>corporate gifts</a> or <a href='/order/'>order form</a>.</p>", [])
     return out
 
-CSS = """@font-face{font-family:Fraunces;font-style:normal;font-weight:560;font-display:swap;src:url("/assets/fonts/fraunces-latin.woff2") format("woff2")}
-@font-face{font-family:Fraunces;font-style:normal;font-weight:650;font-display:swap;src:url("/assets/fonts/fraunces-latin.woff2") format("woff2")}
+CSS = """@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/poppins-400.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/poppins-600.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/poppins-700.woff2") format("woff2")}
-:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--serif:Fraunces,Iowan Old Style,Palatino,Georgia,serif;--sans:Poppins,Avenir Next,Segoe UI,sans-serif}
+:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink)}
 img{max-width:100%;height:auto;display:block}
@@ -556,13 +555,13 @@ a{color:var(--ink)}
 .announce p{margin:0;padding:10px 16px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .site-header{background:var(--cream);border-bottom:1px solid var(--line)}
 .site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding-top:16px;padding-bottom:14px}
-.brand{font-family:var(--serif);font-weight:650;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
+.brand{font-family:var(--sans);font-weight:700;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
 .site-header nav{display:flex;flex-wrap:wrap;gap:4px}
 .site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
 .site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
 .site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
 .page{padding:28px 20px 64px}
-h1,h2,h3{font-family:var(--serif);font-weight:650;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
+h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
 h1{font-size:clamp(44px,8vw,88px);margin:0 0 .25em;max-width:14ch}
 h2{font-size:clamp(32px,4vw,52px);margin:0 0 .35em}
 h3{font-size:26px;margin:0 0 .25em}
@@ -592,7 +591,7 @@ h3{font-size:26px;margin:0 0 .25em}
 .card h3 a{color:var(--ink);text-decoration:none}
 .card h3 a:hover{text-decoration:underline}
 .card p{margin:0}
-.price{font-family:var(--serif);font-size:32px;font-weight:650;margin:0}
+.price{font-family:var(--sans);font-size:32px;font-weight:700;margin:0}
 .price span{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.08em}
 .card .btn{margin-top:6px;align-self:flex-start}
 .steps{list-style:none;margin:0;padding:0;display:grid;gap:18px}
@@ -620,7 +619,7 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .buy{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
 .site-footer{background:#111;color:#fbf6f1;padding:42px 0 28px;margin-top:36px}
 .site-footer a{color:#fbf6f1}
-.footer-brand{font-family:var(--serif);font-size:36px;font-weight:650;margin:0 0 8px;letter-spacing:-.03em}
+.footer-brand{font-family:var(--sans);font-size:36px;font-weight:700;margin:0 0 8px;letter-spacing:-.03em}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0}
 .site-footer nav a{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-underline-offset:4px}
 .site-footer .fine{color:#fbf6f1}
@@ -959,7 +958,7 @@ Most photographs are used under the [Unsplash License](https://unsplash.com/lice
 
 ## Type
 
-Fraunces and Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files are self-hosted in `assets/fonts/`.
+Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files (400, 600, 700) are self-hosted in `assets/fonts/`.
 """
 
 def write(rel, content, mode="w"):
@@ -996,7 +995,7 @@ def check():
     req = ["index.html", "404.html", ".htaccess", "robots.txt", "robots-staging.txt", "sitemap.xml", "llms.txt",
            "CREDITS.md", "assets/site.css", "assets/site.js", "assets/logo.png",
            "assets/hero.webp", "assets/hero-800.webp", "assets/gift-box.webp", "assets/office-tray.webp", "assets/client-gifts.webp", "assets/logo-cookies.webp",
-           "assets/fonts/fraunces-latin.woff2", "assets/fonts/poppins-600.woff2", "assets/fonts/poppins-700.woff2",
+           "assets/fonts/poppins-400.woff2", "assets/fonts/poppins-600.woff2", "assets/fonts/poppins-700.woff2",
            "_legacy-2022/index.html", "_legacy-2022/assets/torontocookies.jpg"]
     for r in req:
         if not os.path.exists(os.path.join(ROOT, r)):
