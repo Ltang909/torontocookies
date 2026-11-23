@@ -245,7 +245,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 {preload_tag}
-<link rel="stylesheet" href="/assets/site.css?v=2">
+<link rel="stylesheet" href="/assets/site.css?v=3">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -317,7 +317,6 @@ def build_pages():
 <img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async">
 </section>
 <section class="intro"><div class="wrap">
-<p class="kicker">The cookies</p>
 <h1>Corporate &amp; holiday cookie gifts in Toronto, done for you</h1>
 <p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
 <p class="cta-row"><a class="btn" href="#packages">See gift packages</a> <a class="btn btn-ghost" href="/order/" data-track="hero_cta_clicked">Get a quote</a></p>
@@ -333,7 +332,6 @@ def build_pages():
 </div>
 </section>
 <section id="packages" class="band"><div class="wrap">
-<p class="kicker">Four ways to send them</p>
 <h2>Gift packages</h2>
 <p class="section-lead">Fixed prices in Canadian dollars. City of Toronto delivery is included.</p>
 <div class="grid">{cards}</div>
@@ -349,7 +347,6 @@ def build_pages():
 <section class="upsell"><div class="wrap upsell-grid">
 <img src="{logo['image']}" alt="{e(logo['alt'])}" width="{logo['iw']}" height="{logo['ih']}" loading="lazy" decoding="async">
 <div>
-<p class="kicker">Put the name on the cookie</p>
 <h2>Cookies with your logo</h2>
 <p>Printed in edible ink or hand-iced by a Toronto specialist, usually with a free mock-up first. The price is the bakery's quote plus a 20% concierge fee, from $79.</p>
 <p><a class="btn" href="/logo-cookies-toronto/" data-track="package_viewed_from_card" data-package="logo-cookies">See logo cookies</a></p>
@@ -549,7 +546,7 @@ body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink
 img{max-width:100%;height:auto;display:block}
 a{color:var(--ink)}
 :focus-visible{outline:3px solid var(--pink);outline-offset:3px}
-.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.wrap{max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,64px)}
 .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:10px 14px;z-index:9}
 .announce{background:var(--pink);color:#fff;text-align:center}
 .announce p{margin:0;padding:10px 16px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
@@ -560,13 +557,12 @@ a{color:var(--ink)}
 .site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
 .site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
 .site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
-.page{padding:28px 20px 64px}
+.page{padding:28px 0 64px}
 h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
 h1{font-size:clamp(44px,8vw,88px);margin:0 0 .25em;max-width:14ch}
-h2{font-size:clamp(32px,4vw,52px);margin:0 0 .35em}
+h2{font-size:clamp(32px,4vw,52px);margin:0 0 .4em}
 h3{font-size:26px;margin:0 0 .25em}
-.kicker,.eyebrow{font-family:var(--sans);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin:0 0 12px}
-.lede{font-size:18px;max-width:40rem}
+.lede,.section-lead,.upsell p,.page > p{font-size:18px;max-width:70ch}
 .section-lead{margin-top:0}
 .cookie-hero img{width:100%;height:auto;aspect-ratio:2/1;object-fit:cover}
 .intro{padding:36px 0 10px}
@@ -632,6 +628,9 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .upsell-grid{grid-template-columns:1fr 1fr;gap:48px}
 .product-intro{grid-template-columns:1.05fr .95fr;gap:48px}
 .product-photo{order:2}
+}
+@media(min-width:1280px){
+.grid{grid-template-columns:repeat(4,1fr);gap:28px}
 }
 """
 
