@@ -829,8 +829,10 @@ jobs:
           temporaryPublicStorage: true
 """
 
-# Staging FTP account is chrooted at public_html/staging, so server-dir is ./.
-# protocol ftps is explicit TLS (supported by SamKirkland/FTP-Deploy-Action v4).
+# The Hostinger FTP user is rooted at public_html (the live site), not inside staging.
+# server-dir must be staging/ so uploads land in public_html/staging/.
+# The sync state file is server-dir + state-name, so it stays inside that folder.
+# dangerous-clean-slate stays false: the action must not wipe the server folder.
 DEPLOY_STAGING = r"""name: Deploy staging
 on:
   push:
@@ -856,14 +858,14 @@ jobs:
             echo "::notice::FTP secrets are not set (FTP_SERVER, FTP_USERNAME, FTP_PASSWORD). Skipping the staging deploy."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
-            echo "FTP secrets are present. Deploying."
+            echo "FTP secrets are present. Deploying into staging/ only."
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/checkout@v4
         if: steps.ftp.outputs.ready == 'true'
 
-      - name: Deploy to public_html/staging over FTPS
+      - name: Deploy into public_html/staging over FTPS
         if: steps.ftp.outputs.ready == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -871,8 +873,13 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          port: 21
           local-dir: ./
-          server-dir: ./
+          # Relative to the FTP root (public_html). Never "./" — that is the live site.
+          server-dir: staging/
+          # Stored at staging/.ftp-deploy-sync-state.json. Deletes only paths listed there.
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
@@ -930,7 +937,7 @@ Static site for **Toronto Cookies**, a corporate and holiday cookie gifting conc
 * `_legacy-2022/` is the backup of the 2022 page (blocked from the web by `.htaccess`).
 * Photo and type credits are in `CREDITS.md`, also blocked by the markdown rule.
 * Bare-domain HTTPS is Hostinger's Force HTTPS setting. `.htaccess` only redirects `www` to the apex, so `staging.*` is left alone (noindex header and `robots-staging.txt` still apply there).
-* A push to `staging` deploys that folder over FTPS when `FTP_SERVER`, `FTP_USERNAME`, and `FTP_PASSWORD` are set. Missing secrets skip the deploy.
+* A push to `staging` deploys into `public_html/staging/` over FTPS (the FTP account is rooted at `public_html`). Missing secrets skip the deploy.
 """
 
 CREDITS = """# Credits

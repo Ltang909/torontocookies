@@ -23,14 +23,14 @@ jobs:
             echo "::notice::FTP secrets are not set (FTP_SERVER, FTP_USERNAME, FTP_PASSWORD). Skipping the staging deploy."
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
-            echo "FTP secrets are present. Deploying."
+            echo "FTP secrets are present. Deploying into staging/ only."
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
       - uses: actions/checkout@v4
         if: steps.ftp.outputs.ready == 'true'
 
-      - name: Deploy to public_html/staging over FTPS
+      - name: Deploy into public_html/staging over FTPS
         if: steps.ftp.outputs.ready == 'true'
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -38,8 +38,13 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          port: 21
           local-dir: ./
-          server-dir: ./
+          # Relative to the FTP root (public_html). Never "./" — that is the live site.
+          server-dir: staging/
+          # Stored at staging/.ftp-deploy-sync-state.json. Deletes only paths listed there.
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
           exclude: |
             **/.git*
             **/.git*/**
