@@ -1,0 +1,66 @@
+name: Site QA
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-check:
+    name: Build + structure checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Generated files are up to date
+        run: |
+          python3 build.py
+          git diff --exit-code || (echo "::error::Run 'python3 build.py' and commit the output" && exit 1)
+      - name: Structure, schema and internal links
+        run: python3 build.py --check
+
+  html-validate:
+    name: HTML validation (W3C Nu)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Cyb3r-Jak3/html5validator-action@v7.2.0
+        with:
+          root: .
+          blacklist: _legacy-2022 .github
+          format: text
+
+  links:
+    name: Broken links (lychee)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Internal links (blocking)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress --root-dir "${{ github.workspace }}" --exclude-path _legacy-2022 './**/*.html'
+          fail: true
+      - name: External links (report only)
+        uses: lycheeverse/lychee-action@v2
+        continue-on-error: true
+        with:
+          args: --no-progress --max-retries 2 --timeout 20 --accept 200,201,204,301,302,403,429 --exclude 'formsubmit\.co' --exclude 'posthog\.com' --exclude 'torontocookies\.ca' --exclude-path _legacy-2022 './**/*.html'
+          fail: false
+
+  lighthouse:
+    name: Lighthouse CI (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./.github/lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

@@ -1,0 +1,25 @@
+# Toronto Cookies
+
+> Corporate and holiday cookie gifting concierge for Toronto offices. We source gourmet, nut-free and custom logo cookies from licensed Toronto bakeries and deliver to every recipient. We do not bake or handle food ourselves.
+
+Key facts:
+- Single holiday cookie gift box delivered in Toronto: $59 CAD
+- Office holiday cookie tray (24-30 cookies): $129 CAD
+- Client Gift Pack, 10 boxes to 10 Toronto addresses with cards: $590 CAD
+- Custom logo cookies: bakery quote + 20% concierge fee, minimum $79 CAD
+- City of Toronto delivery included; rest of GTA quoted
+- 2026 holiday deadline: order by Wednesday, December 9, 2026 for delivery by Friday, December 18, 2026
+- Payment by card via Stripe after the order is confirmed; nothing is ordered before payment
+
+## Pages
+- [Corporate cookie gifts Toronto](https://torontocookies.ca/corporate-cookie-gifts-toronto/): packages, prices, uses
+- [Single Holiday Cookie Gift](https://torontocookies.ca/holiday-cookie-gift-box-toronto/): One festive box of 6 gourmet cookies from a top Toronto bakery, with a handwritten-style card, delivered to one Toronto address.
+- [Office Holiday Cookie Tray](https://torontocookies.ca/office-cookie-tray-toronto/): A shareable tray of 24 to 30 fresh cookies for the office, the holiday party, or a client meeting, delivered to your Toronto office.
+- [Client Gift Pack (10 boxes)](https://torontocookies.ca/client-cookie-gift-pack-toronto/): Ten holiday cookie gift boxes sent to ten different Toronto addresses, each with its own card. Send us a list; we handle the rest.
+- [Custom Logo Cookies](https://torontocookies.ca/logo-cookies-toronto/): Cookies printed or hand-decorated with your company logo, sourced from a Toronto logo-cookie specialist. We quote the bakery's price plus a 20% concierge fee, minimum $79.
+- [FAQ](https://torontocookies.ca/faq/): prices, deadlines, delivery, allergies, payment
+- [2026 holiday cookie gift deadlines](https://torontocookies.ca/guides/holiday-cookie-gift-deadlines-toronto-2026/)
+- [Toronto custom cookie price guide](https://torontocookies.ca/custom-cookie-prices-toronto/)
+- [Order or request a quote](https://torontocookies.ca/order/)
+
+Contact: orders@torontocookies.ca
