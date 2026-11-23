@@ -94,6 +94,8 @@ PACKAGES = [
 ]
 
 HERO = {"src": "/assets/hero.webp", "w": 1400, "h": 1050,
+        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1400w",
+        "sizes": "(min-width: 720px) 46vw, 100vw",
         "alt": "Chocolate chunk cookies broken open on parchment paper"}
 
 FAQ = [
@@ -209,14 +211,20 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 # The authoritative noindex is the X-Robots-Tag header set in .htaccess for staging.*.
 STAGING_GUARD = """<script>if(location.hostname.indexOf('staging.')===0){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}</script>"""
 
-def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, bleed=False):
+def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, bleed=False, preload_srcset=None, preload_sizes=None):
     canonical = BASE + path
     graph = [ORG, WEBSITE] + schema_nodes
     if h_crumbs:
         graph.append(crumbs(h_crumbs))
     ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1)
     nav = "".join('<a href="%s"%s>%s</a>' % (u, ' aria-current="page"' if u == path else "", n) for u, n in NAV)
-    preload_tag = ('<link rel="preload" as="image" href="%s" fetchpriority="high">' % preload) if preload else ""
+    if preload and preload_srcset:
+        preload_tag = ('<link rel="preload" as="image" href="%s" imagesrcset="%s" imagesizes="%s" fetchpriority="high">'
+                       % (preload, preload_srcset, preload_sizes))
+    elif preload:
+        preload_tag = '<link rel="preload" as="image" href="%s" fetchpriority="high">' % preload
+    else:
+        preload_tag = ""
     main_attr = "" if bleed else ' class="wrap page"'
     return f"""<!doctype html>
 <html lang="en-CA">
@@ -312,7 +320,7 @@ def build_pages():
 <p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
 <p class="cta-row"><a class="btn" href="#packages">See gift packages</a> <a class="btn btn-ghost" href="/order/" data-track="hero_cta_clicked">Get a quote</a></p>
 </div>
-<figure class="hero-photo"><img src="{HERO['src']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async"></figure>
+<figure class="hero-photo"><img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async"></figure>
 </div>
 </section>
 <section class="trust" aria-label="Why offices use Toronto Cookies">
@@ -355,7 +363,9 @@ def build_pages():
 </div></section>"""
     out["index.html"] = page("/", "Corporate & Holiday Cookie Gifts Toronto | Toronto Cookies",
         "Corporate and holiday cookie gifts delivered across Toronto from top local bakeries. Single gifts $59, office trays $129, 10 client gifts $590. Order by Dec 9.",
-        body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES], preload=HERO["src"], bleed=True)
+        body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES],
+        preload="/assets/hero-800.webp", bleed=True,
+        preload_srcset=HERO["srcset"], preload_sizes=HERO["sizes"])
 
     # Corporate hub
     body = f"""<h1>Corporate cookie gifts in Toronto</h1>
@@ -978,7 +988,7 @@ def check():
     errors = []
     req = ["index.html", "404.html", ".htaccess", "robots.txt", "robots-staging.txt", "sitemap.xml", "llms.txt",
            "CREDITS.md", "assets/site.css", "assets/site.js", "assets/logo.png",
-           "assets/hero.webp", "assets/gift-box.webp", "assets/office-tray.webp", "assets/client-gifts.webp", "assets/logo-cookies.webp",
+           "assets/hero.webp", "assets/hero-800.webp", "assets/gift-box.webp", "assets/office-tray.webp", "assets/client-gifts.webp", "assets/logo-cookies.webp",
            "assets/fonts/fraunces-latin.woff2", "assets/fonts/outfit-latin.woff2",
            "_legacy-2022/index.html", "_legacy-2022/assets/torontocookies.jpg"]
     for r in req:
