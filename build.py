@@ -93,10 +93,10 @@ PACKAGES = [
     },
 ]
 
-HERO = {"src": "/assets/hero.webp", "w": 1600, "h": 800,
-        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1600w",
-        "sizes": "100vw",
-        "alt": "A close-up of chocolate chunk cookies broken open on parchment"}
+HERO = {"src": "/assets/hero.webp", "w": 1200, "h": 800,
+        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1200w",
+        "sizes": "(min-width: 800px) 42vw, 100vw",
+        "alt": "Wrapped gift boxes with satin ribbons, arranged as a corporate gift"}
 
 FAQ = [
     ("How does Toronto Cookies work?",
@@ -245,7 +245,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 {preload_tag}
-<link rel="stylesheet" href="/assets/site.css?v=4">
+<link rel="stylesheet" href="/assets/site.css?v=5">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -253,7 +253,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<div class="announce"><p>Order by {CONFIG["ORDER_BY"]} for delivery by {CONFIG["DELIVER_BY"]}.</p></div>
+<div class="announce"><div class="wrap"><p>Order by {CONFIG["ORDER_BY"]} for delivery by {CONFIG["DELIVER_BY"]}.</p></div></div>
 <header class="site-header"><div class="wrap">
 <a class="brand" href="/">Toronto Cookies</a>
 <nav aria-label="Main">{nav}</nav>
@@ -319,7 +319,7 @@ def build_pages():
 <p class="lede">Client gifts, office trays, holiday thank-yous and logo cookies, delivered across the GTA.</p>
 <p class="cta-row"><a class="btn" href="/order/" data-track="hero_cta_clicked">Order corporate gifts</a> <a class="btn btn-ghost" href="#packages">See packages</a></p>
 </div>
-<figure class="hero-visual"><img src="{logo['image']}" alt="{e(logo['alt'])}" width="{logo['iw']}" height="{logo['ih']}" fetchpriority="high" decoding="async"></figure>
+<figure class="hero-visual"><img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async"></figure>
 </div></section>
 <section class="proof" aria-label="Ordering facts"><div class="wrap">
 <p>Prepaid via Stripe · City of Toronto delivery included, GTA quoted · Order by {CONFIG["ORDER_BY"]}</p>
@@ -364,7 +364,7 @@ def build_pages():
     out["index.html"] = page("/", "Corporate & Holiday Cookie Gifts Toronto | Toronto Cookies",
         "Corporate and holiday cookie gifts delivered across Toronto from top local bakeries. Single gifts $59, office trays $129, 10 client gifts $590. Order by Dec 9.",
         body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES],
-        preload=logo["image"], bleed=True)
+        preload="/assets/hero-800.webp", bleed=True, preload_srcset=HERO["srcset"], preload_sizes=HERO["sizes"])
 
     # Corporate hub
     body = f"""<h1>Corporate cookie gifts in Toronto</h1>
@@ -542,16 +542,16 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
 CSS = """@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/poppins-400.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/poppins-600.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/poppins-700.woff2") format("woff2")}
-:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif}
+:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif;--container:1440px;--gutter:clamp(20px,4vw,64px);--section:clamp(64px,8vw,128px)}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink)}
 img{max-width:100%;height:auto;display:block}
 a{color:var(--ink)}
 :focus-visible{outline:3px solid var(--pink);outline-offset:3px}
-.wrap{max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,64px)}
+.wrap{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
 .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:10px 14px;z-index:9}
-.announce{background:var(--pink);color:#fff;text-align:center}
-.announce p{margin:0;padding:10px 16px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.announce{background:var(--pink);color:#fff}
+.announce p{margin:0;padding:12px 0;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .site-header{background:var(--cream);border-bottom:1px solid var(--line)}
 .site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding-top:16px;padding-bottom:14px}
 .brand{font-family:var(--sans);font-weight:700;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
@@ -559,19 +559,22 @@ a{color:var(--ink)}
 .site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
 .site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
 .site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
-.page{padding:40px 0 90px}
+.page{padding-top:var(--section);padding-bottom:var(--section)}
 h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
-h1{font-size:clamp(44px,8vw,88px);margin:0 0 .25em;max-width:14ch}
-h2{font-size:clamp(32px,4vw,52px);margin:0 0 .4em}
+h1{font-size:clamp(40px,4.6vw,68px);margin:0 0 28px;max-width:none}
+h2{font-size:clamp(32px,4vw,52px);margin:64px 0 24px}
+:is(.wrap,.page) > h2:first-child{margin-top:0}
 h3{font-size:26px;margin:0 0 .25em}
-.lede,.section-lead,.upsell p,.page > p{font-size:18px;max-width:70ch}
+.lede,.section-lead,.upsell p,.page > p:not(.notice){font-size:18px;max-width:65ch}
+.lede,.section-lead,.page > .lede{margin:0 0 28px}
 .section-lead{margin-top:0}
-.hero{padding:22px 0 6px}
-.hero-grid{display:grid;gap:16px;align-items:center}
+.page > p:not(.notice):not(.lede){margin:0 0 20px}
+.hero{padding:32px 0 20px}
+.hero-grid{display:grid;gap:28px;align-items:center}
 .hero-visual{margin:0}
-.hero-visual img{width:100%;height:150px;object-fit:cover}
-.hero h1{font-size:clamp(32px,5vw,56px);max-width:18ch}
-.proof{padding:10px 0 4px}
+.hero-visual img{width:100%;height:220px;object-fit:cover;object-position:68% 42%}
+.hero h1{font-size:clamp(36px,3.4vw,56px);max-width:none;margin-bottom:24px}
+.proof{padding:20px 0}
 .proof p{margin:0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px;font-weight:600;max-width:none}
 .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;background:var(--pink);color:#fff;padding:14px 22px;border-radius:2px;text-decoration:none;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:14px;border:2px solid var(--pink);cursor:pointer}
@@ -579,17 +582,16 @@ h3{font-size:26px;margin:0 0 .25em}
 .btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:#fff}
 .btn-small{min-height:46px;padding:10px 14px;font-size:12px}
-.trust{padding:16px 0 32px}
+.trust{padding-top:var(--section);padding-bottom:var(--section)}
 .trust-row{list-style:none;margin:0;padding:8px 0 4px;display:grid;gap:16px}
 .trust-row li{display:grid;gap:4px}
 .trust-row strong{font-size:14px;letter-spacing:.06em;text-transform:uppercase}
 .trust-row span{color:var(--muted);font-size:15px}
-.band{padding:28px 0 16px}
-.how,.upsell,.faq-teaser{padding:22px 0}
-.grid{display:grid;grid-template-columns:1fr;gap:28px}
-.card{background:transparent;display:flex;flex-direction:column;gap:12px}
+.band,.how,.upsell,.faq-teaser{padding-top:var(--section);padding-bottom:var(--section)}
+.grid{display:grid;grid-template-columns:1fr;gap:36px}
+.card{background:transparent;display:flex;flex-direction:column}
 .card img{width:100%;aspect-ratio:1/1;object-fit:cover}
-.card-body{display:flex;flex-direction:column;gap:8px;padding:0}
+.card-body{display:flex;flex-direction:column;gap:10px;padding:24px 4px 8px}
 .card h3{font-size:22px;text-transform:uppercase;letter-spacing:-.02em}
 .card h3 a{color:var(--ink);text-decoration:none}
 .card h3 a:hover{text-decoration:underline}
@@ -602,8 +604,8 @@ h3{font-size:26px;margin:0 0 .25em}
 .steps p{margin:.3em 0 0;color:var(--muted)}
 .upsell-grid{display:grid;gap:22px;align-items:center}
 .upsell-grid img{width:100%;aspect-ratio:1/1;object-fit:cover}
-.deadline{padding:42px 0}
-.notice{background:#fff;border:2px solid var(--ink);padding:16px 18px;margin:0}
+.deadline{padding-top:var(--section);padding-bottom:var(--section)}
+.notice{background:#fff;border:2px solid var(--ink);padding:28px 32px;margin:0;max-width:none}
 .product-intro{display:grid;gap:22px;align-items:center;margin-bottom:12px}
 .product-photo{margin:0}
 .product-photo img{width:100%;aspect-ratio:1/1;object-fit:cover}
@@ -611,7 +613,7 @@ h3{font-size:26px;margin:0 0 .25em}
 table{border-collapse:collapse;width:100%;background:#fff;margin:12px 0}
 th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}
 th{font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-details{background:#fff;border-bottom:1px solid var(--line);padding:8px 0;margin:0}
+details{background:#fff;border-bottom:1px solid var(--line);padding:18px 0;margin:0}
 summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:center}
 .order{display:grid;gap:14px;max-width:640px}
 .order label{display:grid;gap:6px;font-weight:600}
@@ -620,7 +622,7 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .small,.fine{font-size:14px}
 .crumbs{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
 .buy{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
-.site-footer{background:#111;color:#fbf6f1;padding:56px 0 36px;margin-top:52px}
+.site-footer{background:#111;color:#fbf6f1;padding:64px 0 40px}
 .site-footer a{color:#fbf6f1}
 .footer-brand{font-family:var(--sans);font-size:36px;font-weight:700;margin:0 0 8px;letter-spacing:-.03em}
 .site-footer nav{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0}
@@ -629,17 +631,17 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .order-steps li{margin:8px 0}
 @media(min-width:800px){
 .trust-row{grid-template-columns:repeat(4,1fr);gap:22px}
-.grid{grid-template-columns:1fr 1fr;gap:32px 28px}
-.steps-3{grid-template-columns:1fr 1fr 1fr;gap:28px}
-.hero{padding:28px 0 8px}
-.hero-grid{grid-template-columns:1.15fr .85fr;gap:36px}
-.hero-visual img{height:340px}
+.grid{grid-template-columns:1fr 1fr;gap:36px}
+.steps-3{grid-template-columns:1fr 1fr 1fr;gap:32px}
+.hero{padding:40px 0 24px}
+.hero-grid{grid-template-columns:1.15fr .85fr;gap:40px}
+.hero-visual img{height:min(360px,42vh)}
 .upsell-grid{grid-template-columns:1fr 1fr;gap:64px}
 .product-intro{grid-template-columns:1.05fr .95fr;gap:48px}
 .product-photo{order:2}
 }
 @media(min-width:1280px){
-.grid{grid-template-columns:repeat(4,1fr);gap:28px}
+.grid{grid-template-columns:repeat(4,1fr);gap:36px}
 }
 """
 
@@ -954,11 +956,11 @@ Photographs and typefaces used on torontocookies.ca. This file is blocked from t
 
 ## Photographs
 
-Most photographs are used under the [Unsplash License](https://unsplash.com/license). The iced sugar cookies are from Wikimedia Commons under CC BY-SA 3.0. This WebP crop is shared under the same licence.
+Most photographs are used under the [Unsplash License](https://unsplash.com/license). The home hero is used under the [Pexels License](https://www.pexels.com/license/). The iced sugar cookies are from Wikimedia Commons under CC BY-SA 3.0. This WebP crop is shared under the same licence.
 
 | File | What it shows | Source |
 | --- | --- | --- |
-| `assets/hero.webp` | Close-up of chocolate chunk cookies | https://images.unsplash.com/photo-1499636136210-6f4ee915583e |
+| `assets/hero.webp` | Wrapped gift boxes with satin ribbons | https://www.pexels.com/photo/1303081/ — [Pexels License](https://www.pexels.com/license/) (commercial use, no attribution required). File: https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg |
 | `assets/gift-box.webp` | A stack of chocolate chip cookies | https://images.unsplash.com/photo-1548365328-8c6db3220e4c |
 | `assets/office-tray.webp` | Cookies in a parchment-lined bowl | https://images.unsplash.com/photo-1558961363-fa8fdf82db35 — Mae Mu |
 | `assets/client-gifts.webp` | Gingerbread people and snowflakes | https://images.unsplash.com/photo-1639590229762-3c9a8c98ca31 |
