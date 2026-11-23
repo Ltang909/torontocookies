@@ -6,7 +6,7 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Block repo internals and the 2022 backup from the web
+# Block repo internals, the 2022 backup, and markdown (including CREDITS.md) from the web
 RewriteRule ^(\.git|\.github|_legacy-2022)(/|$) - [F,L,NC]
 RewriteRule ^(build\.py|README\.md|.*\.md)$ - [F,L,NC]
 
@@ -18,12 +18,10 @@ RewriteRule ^staging(/|$) - [R=404,L,NC]
 RewriteCond %{HTTP_HOST} ^staging\. [NC]
 RewriteRule ^robots\.txt$ /robots-staging.txt [L]
 
-# Production: force HTTPS and the bare domain (staging is left alone)
+# www to the bare domain. Do not also force HTTPS for torontocookies.ca here.
+# Hostinger's Force HTTPS already 301s http://torontocookies.ca/ at the CDN.
+# Testing %{HTTPS} !=on and X-Forwarded-Proto on LiteSpeed returns 500 for that request.
 RewriteCond %{HTTP_HOST} ^www\.torontocookies\.ca$ [NC]
-RewriteRule ^(.*)$ https://torontocookies.ca/$1 [R=301,L]
-RewriteCond %{HTTP_HOST} ^torontocookies\.ca$ [NC]
-RewriteCond %{HTTPS} !=on
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^(.*)$ https://torontocookies.ca/$1 [R=301,L]
 
 # Old 2022 page URL, if anything still links to it

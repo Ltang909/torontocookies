@@ -48,6 +48,8 @@ PACKAGES = [
                      "Delivery to one address in the City of Toronto",
                      "Nut-free option on request (sourced from a nut-free bakery)"],
         "best_for": "A thank-you to one client, a host gift, or a colleague you can't see in person.",
+        "image": "/assets/gift-box.webp", "iw": 933, "ih": 933,
+        "alt": "A tall stack of chocolate chip cookies",
     },
     {
         "id": "office-tray", "slug": "office-cookie-tray-toronto",
@@ -59,6 +61,8 @@ PACKAGES = [
                      "Delivery to one Toronto office, timed to your event",
                      "Dietary notes (nut-free, vegan options) passed to the bakery"],
         "best_for": "Holiday parties, team lunches, reception desks and client meetings.",
+        "image": "/assets/office-tray.webp", "iw": 1000, "ih": 1000,
+        "alt": "A parchment-lined bowl filled with chocolate chip cookies to share",
     },
     {
         "id": "client-gift-pack", "slug": "client-cookie-gift-pack-toronto",
@@ -71,6 +75,8 @@ PACKAGES = [
                      "One delivery-status summary email when every box has landed",
                      "Need 20, 50 or 100? Add packs or ask for a quote"],
         "best_for": "Law, accounting, real-estate and agency teams thanking their best clients.",
+        "image": "/assets/client-gifts.webp", "iw": 933, "ih": 933,
+        "alt": "Gingerbread people and snowflake cookies cooling on a rack",
     },
     {
         "id": "logo-cookies", "slug": "logo-cookies-toronto",
@@ -82,8 +88,15 @@ PACKAGES = [
                      "Optional gift boxes, cards and multi-address delivery",
                      "Transparent pricing: bakery quote + 20% concierge fee, $79 minimum"],
         "best_for": "Client gifts, conferences, launches and holiday parties where your brand should show.",
+        "image": "/assets/logo-cookies.webp", "iw": 1000, "ih": 1000,
+        "alt": "Iced sugar cookies in stars, trees, and a heart, with sprinkles",
     },
 ]
+
+HERO = {"src": "/assets/hero.webp", "w": 1200, "h": 800,
+        "srcset": "/assets/hero-800.webp 800w, /assets/hero.webp 1200w",
+        "sizes": "(min-width: 800px) 42vw, 100vw",
+        "alt": "Wrapped gift boxes with satin ribbons, arranged as a corporate gift"}
 
 FAQ = [
     ("How does Toronto Cookies work?",
@@ -198,13 +211,21 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 # The authoritative noindex is the X-Robots-Tag header set in .htaccess for staging.*.
 STAGING_GUARD = """<script>if(location.hostname.indexOf('staging.')===0){var m=document.createElement('meta');m.name='robots';m.content='noindex,nofollow';document.head.appendChild(m);}</script>"""
 
-def page(path, title, desc, body, schema_nodes, h_crumbs=None):
+def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, bleed=False, preload_srcset=None, preload_sizes=None):
     canonical = BASE + path
     graph = [ORG, WEBSITE] + schema_nodes
     if h_crumbs:
         graph.append(crumbs(h_crumbs))
     ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1)
     nav = "".join('<a href="%s"%s>%s</a>' % (u, ' aria-current="page"' if u == path else "", n) for u, n in NAV)
+    if preload and preload_srcset:
+        preload_tag = ('<link rel="preload" as="image" href="%s" imagesrcset="%s" imagesizes="%s" fetchpriority="high">'
+                       % (preload, preload_srcset, preload_sizes))
+    elif preload:
+        preload_tag = '<link rel="preload" as="image" href="%s" fetchpriority="high">' % preload
+    else:
+        preload_tag = ""
+    main_attr = "" if bleed else ' class="wrap page"'
     return f"""<!doctype html>
 <html lang="en-CA">
 <head>
@@ -223,7 +244,8 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None):
 <meta property="og:locale" content="en_CA">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/site.css">
+{preload_tag}
+<link rel="stylesheet" href="/assets/site.css?v=6">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -231,17 +253,29 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None):
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div class="announce"><div class="wrap"><p>Order by {CONFIG["ORDER_BY"]} for delivery by {CONFIG["DELIVER_BY"]}.</p></div></div>
 <header class="site-header"><div class="wrap">
-<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> Toronto Cookies</a>
+<a class="brand" href="/">Toronto Cookies</a>
 <nav aria-label="Main">{nav}</nav>
 </div></header>
-<main id="main" class="wrap">
+<main id="main"{main_attr}>
 {body}
 </main>
 <footer class="site-footer"><div class="wrap">
-<p><strong>Toronto Cookies</strong> is a corporate and holiday cookie gifting concierge serving Toronto and the GTA. We source from licensed, inspected Toronto bakeries; we do not bake or handle food ourselves.</p>
-<p><a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a> · <a href="/office-cookie-tray-toronto/">Office tray $129</a> · <a href="/client-cookie-gift-pack-toronto/">Client pack $590</a> · <a href="/logo-cookies-toronto/">Logo cookies</a> · <a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a> · <a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a> · <a href="/about/">About</a></p>
-<p>Questions: <a href="mailto:{CONFIG['ORDER_EMAIL']}">{CONFIG['ORDER_EMAIL']}</a> · Prices in CAD · © 2026 Toronto Cookies</p>
+<p class="footer-brand">Toronto Cookies</p>
+<p>A corporate and holiday cookie gifting concierge for Toronto and the GTA. We source from licensed, inspected Toronto bakeries. We do not bake or handle food ourselves.</p>
+<nav aria-label="Footer">
+<a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a>
+<a href="/office-cookie-tray-toronto/">Office tray $129</a>
+<a href="/client-cookie-gift-pack-toronto/">Client pack $590</a>
+<a href="/logo-cookies-toronto/">Logo cookies</a>
+<a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a>
+<a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a>
+<a href="/about/">About</a>
+<a href="/faq/">FAQ</a>
+<a href="/order/">Order</a>
+</nav>
+<p class="fine">Questions: <a href="mailto:{CONFIG['ORDER_EMAIL']}">{CONFIG['ORDER_EMAIL']}</a> · Prices in CAD · © 2026 Toronto Cookies</p>
 </div></footer>
 <script src="/assets/site.js" defer></script>
 </body>
@@ -258,10 +292,13 @@ def pay_button(p):
 
 def card(p):
     return f"""<article class="card">
+<img src="{p['image']}" alt="{e(p['alt'])}" width="{p['iw']}" height="{p['ih']}" loading="lazy" decoding="async">
+<div class="card-body">
 <h3><a href="/{p['slug']}/">{e(p['name'])}</a></h3>
 <p class="price">{e(p['price_label'])}<span> CAD</span></p>
 <p>{e(p['short'])}</p>
 <p><a class="btn btn-small" href="/{p['slug']}/" data-track="package_viewed_from_card" data-package="{p['id']}">See what's included</a></p>
+</div>
 </article>"""
 
 def faq_html(pairs):
@@ -275,31 +312,59 @@ def build_pages():
     cards = "\n".join(card(p) for p in PACKAGES)
 
     # Home
-    body = f"""<section class="hero">
-<h1>Corporate &amp; holiday cookie gifts in Toronto, done for you</h1>
-<p class="lede"><strong>Toronto Cookies sends gourmet cookie gifts from top Toronto bakeries to your clients and team.</strong> Pick a package from $59, send us your list, and we handle the bakery, the cards and delivery to every Toronto address. You pay only after we confirm.</p>
-<p><a class="btn" href="/order/" data-track="hero_cta_clicked">Get your cookie gifts sorted</a> <a class="btn btn-ghost" href="#packages">See packages</a></p>
-{DEADLINE}
+    logo = next(p for p in PACKAGES if p["id"] == "logo-cookies")
+    body = f"""<section class="hero"><div class="wrap hero-grid">
+<div>
+<h1>Corporate cookie gifts for Toronto teams and clients</h1>
+<p class="lede">Client gifts, office trays, holiday thank-yous and logo cookies, delivered across the GTA.</p>
+<p class="cta-row"><a class="btn" href="/order/" data-track="hero_cta_clicked">Order corporate gifts</a> <a class="btn btn-ghost" href="#packages">See packages</a></p>
+</div>
+<figure class="hero-visual"><img src="{HERO['src']}" srcset="{HERO['srcset']}" sizes="{HERO['sizes']}" alt="{e(HERO['alt'])}" width="{HERO['w']}" height="{HERO['h']}" fetchpriority="high" decoding="async"></figure>
+</div></section>
+<section class="proof" aria-label="Ordering facts"><div class="wrap">
+<p>Prepaid via Stripe · City of Toronto delivery included, GTA quoted · Order by {CONFIG["ORDER_BY"]}</p>
+</div></section>
+<section class="trust" aria-label="Why offices use Toronto Cookies">
+<div class="wrap">
+<ul class="trust-row">
+<li><strong>Licensed bakeries</strong><span>Inspected Toronto kitchens. We never bake or handle the food.</span></li>
+<li><strong>One list, every address</strong><span>Ten clients across the city, without ten bakery checkouts.</span></li>
+<li><strong>Pay after we confirm</strong><span>Nothing is ordered until you approve the bakery and the price.</span></li>
+<li><strong>A card in every box</strong><span>Your message, each recipient's name, delivered with the cookies.</span></li>
+</ul>
+</div>
 </section>
-<section id="packages"><h2>Packages</h2><div class="grid">{cards}</div></section>
-<section><h2>How it works</h2>
-<ol class="steps">
-<li><strong>Tell us the brief.</strong> Who it's for, how many, delivery date, budget, dietary needs.</li>
-<li><strong>We confirm the bakery and price.</strong> Usually within one business day, with a secure payment link.</li>
-<li><strong>You pay, we order.</strong> Nothing is ordered until you've paid. We add your cards and book delivery.</li>
-<li><strong>Every box lands.</strong> You get one summary email when all recipients have their cookies.</li>
-</ol></section>
-<section><h2>Why offices use a cookie concierge</h2>
-<ul>
-<li><strong>One contact, many addresses.</strong> Ten clients across the city without ten checkouts.</li>
-<li><strong>The right bakery for the job.</strong> Nut-free facilities, logo-cookie specialists, same-week gourmet boxes.</li>
-<li><strong>Clear, upfront pricing.</strong> Fixed packages, or the bakery's quote plus 20% for custom work.</li>
-<li><strong>Safe and legit.</strong> Every cookie comes from an established, inspected Toronto bakery.</li>
-</ul></section>
-<section><h2>Common questions</h2>{faq_html(FAQ[:5])}<p><a href="/faq/">All questions</a></p></section>"""
+<section id="packages" class="band"><div class="wrap">
+<h2>Gift packages</h2>
+<p class="section-lead">Fixed prices in Canadian dollars. City of Toronto delivery is included.</p>
+<div class="grid">{cards}</div>
+</div></section>
+<section class="how"><div class="wrap">
+<h2>How it works</h2>
+<ol class="steps steps-3">
+<li><h3>Tell us the brief</h3><p>Who it's for, how many, the delivery date, your budget and any dietary needs.</p></li>
+<li><h3>Confirm, then pay</h3><p>We reply within one business day with the bakery and final price. You pay by card. Nothing is ordered before that.</p></li>
+<li><h3>Every box lands</h3><p>We add your cards, book delivery, and email you once when every recipient has their cookies.</p></li>
+</ol>
+</div></section>
+<section class="upsell"><div class="wrap upsell-grid">
+<img src="{logo['image']}" alt="{e(logo['alt'])}" width="{logo['iw']}" height="{logo['ih']}" loading="lazy" decoding="async">
+<div>
+<h2>Cookies with your logo</h2>
+<p>Printed in edible ink or hand-iced by a Toronto specialist, usually with a free mock-up first. The price is the bakery's quote plus a 20% concierge fee, from $79.</p>
+<p><a class="btn" href="/logo-cookies-toronto/" data-track="package_viewed_from_card" data-package="logo-cookies">See logo cookies</a></p>
+</div>
+</div></section>
+<section class="deadline"><div class="wrap">{DEADLINE}</div></section>
+<section class="faq-teaser"><div class="wrap">
+<h2>Common questions</h2>
+{faq_html(FAQ[:5])}
+<p class="after-list"><a class="text-link" href="/faq/">All questions</a></p>
+</div></section>"""
     out["index.html"] = page("/", "Corporate & Holiday Cookie Gifts Toronto | Toronto Cookies",
         "Corporate and holiday cookie gifts delivered across Toronto from top local bakeries. Single gifts $59, office trays $129, 10 client gifts $590. Order by Dec 9.",
-        body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES])
+        body, [faq_schema(FAQ[:5])] + [product_schema(p) for p in PACKAGES],
+        preload="/assets/hero-800.webp", bleed=True, preload_srcset=HERO["srcset"], preload_sizes=HERO["sizes"])
 
     # Corporate hub
     body = f"""<h1>Corporate cookie gifts in Toronto</h1>
@@ -336,24 +401,30 @@ def build_pages():
         if p["id"] == "logo-cookies":
             pfaq = [FAQ[6], FAQ[3], FAQ[7], FAQ[8]]
         inc = "".join(f"<li>{e(i)}</li>" for i in p["includes"])
-        body = f"""<p class="crumbs"><a href="/">Home</a> › <a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a> › {e(p['name'])}</p>
+        body = f"""<div class="product-intro">
+<figure class="product-photo"><img src="{p['image']}" alt="{e(p['alt'])}" width="{p['iw']}" height="{p['ih']}" fetchpriority="high" decoding="async"></figure>
+<div>
+<p class="crumbs"><a href="/">Home</a> › <a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a> › {e(p['name'])}</p>
 <h1>{e(p['kw'])}</h1>
 <p class="lede"><strong>{e(p['name'])}: {e(p['price_label'])} CAD.</strong> {e(p['short'])}</p>
 <div class="buy">{pay_button(p)} <a class="btn btn-ghost" href="/order/?package={p['id']}" data-track="quote_cta_clicked" data-package="{p['id']}">Ask a question first</a></div>
 {DEADLINE}
+</div>
+</div>
 <h2>What's included</h2><ul>{inc}</ul>
 <h2>Best for</h2><p>{e(p['best_for'])}</p>
 <h2>How ordering works</h2>
-<ol class="steps"><li>Send the order form (2 minutes).</li><li>We confirm the bakery, date and final price within one business day.</li><li>You pay by card through a secure Stripe link. Nothing is ordered before payment.</li><li>We place the order, add cards and confirm delivery.</li></ol>
+<ol class="order-steps"><li>Send the order form (2 minutes).</li><li>We confirm the bakery, date and final price within one business day.</li><li>You pay by card through a secure Stripe link. Nothing is ordered before payment.</li><li>We place the order, add cards and confirm delivery.</li></ol>
 <h2>Questions</h2>{faq_html(pfaq)}
-<p>Other packages: {' · '.join(f'<a href="/{q["slug"]}/">{e(q["name"])}</a>' for q in PACKAGES if q is not p)}</p>"""
+<p class="after-list">Other packages: {' · '.join(f'<a href="/{q["slug"]}/">{e(q["name"])}</a>' for q in PACKAGES if q is not p)}</p>"""
         title = {"single-gift": "Holiday Cookie Gift Box Delivered in Toronto ($59) | Toronto Cookies",
                  "office-tray": "Office Cookie Tray Toronto for Holiday Parties ($129)",
                  "client-gift-pack": "Client Cookie Gifts Toronto: 10 Boxes, 10 Addresses ($590)",
                  "logo-cookies": "Custom Logo Cookies Toronto for Corporate Gifts | Toronto Cookies"}[p["id"]]
         desc = p["short"][:155].rsplit(" ", 1)[0] + "."
         out[p["slug"] + "/index.html"] = page(path, title, desc, body, [product_schema(p), faq_schema(pfaq)],
-            [("/", "Home"), ("/corporate-cookie-gifts-toronto/", "Corporate cookie gifts"), (path, p["name"])])
+            [("/", "Home"), ("/corporate-cookie-gifts-toronto/", "Corporate cookie gifts"), (path, p["name"])],
+            preload=p["image"])
 
     # Order / inquiry form
     opts = "".join(f'<option value="{p["id"]}">{e(p["name"])} ({e(p["price_label"])})</option>' for p in PACKAGES)
@@ -394,7 +465,7 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
     # FAQ
     out["faq/index.html"] = page("/faq/", "Corporate Cookie Gift FAQ: Prices, Deadlines & Delivery",
         "Answers about corporate and holiday cookie gifts in Toronto: prices, 2026 order deadlines, multi-address delivery, nut-free options, logo cookies and payment.",
-        f"<h1>Frequently asked questions</h1>{faq_html(FAQ)}<p><a class='btn' href='/order/'>Start an order</a></p>",
+        f"<h1>Frequently asked questions</h1>{faq_html(FAQ)}<p class='after-list'><a class='btn' href='/order/'>Start an order</a></p>",
         [faq_schema(FAQ)], [("/", "Home"), ("/faq/", "FAQ")])
 
     # About
@@ -468,25 +539,117 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
         "<h1>That page crumbled</h1><p>Try the <a href='/'>home page</a>, our <a href='/corporate-cookie-gifts-toronto/'>corporate gifts</a> or <a href='/order/'>order form</a>.</p>", [])
     return out
 
-CSS = """:root{--bg:#fffaf3;--ink:#3b2a24;--brand:#9a5a44;--brand-d:#7a4332;--card:#fff;--muted:#6b5a52;--line:#ecdccb}
-*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;font:17px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
-a{color:var(--brand-d)}.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
-.skip{position:absolute;left:-999px}.skip:focus{left:10px;top:10px;background:#fff;padding:8px;z-index:9}
-.site-header{background:#fff;border-bottom:1px solid var(--line)}.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;padding-bottom:10px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;text-decoration:none;color:var(--ink)}
-nav a{margin-left:16px;text-decoration:none;font-weight:600}nav a[aria-current]{text-decoration:underline}
-main{padding:28px 20px 48px}h1{font-size:clamp(28px,4.5vw,42px);line-height:1.15;margin:.3em 0}h2{margin-top:1.8em}
-.lede{font-size:19px;max-width:760px}.notice{background:#fff3df;border:1px solid #f0d3a6;padding:10px 14px;border-radius:10px;max-width:760px}
-.btn{display:inline-block;background:var(--brand);color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:700;border:0;cursor:pointer;font-size:17px}
-.btn:hover{background:var(--brand-d)}.btn-ghost{background:transparent;color:var(--brand-d);border:2px solid var(--brand)}.btn-ghost:hover{background:#fff}.btn-small{padding:8px 14px;font-size:15px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
-.card h3{margin:0 0 6px}.price{font-size:24px;font-weight:800;margin:0}.price span{font-size:14px;color:var(--muted)}
-.steps li{margin:6px 0}table{border-collapse:collapse;width:100%;background:#fff;margin:12px 0}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:#fbefe2}
-details{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0;max-width:820px}summary{font-weight:700;cursor:pointer}
-.order{display:grid;gap:12px;max-width:620px}.order label{display:grid;gap:4px;font-weight:600}.order input,.order select,.order textarea{font:inherit;padding:10px;border:1px solid #cdb8a6;border-radius:8px;background:#fff}
-.hp{position:absolute;left:-5000px}.small{font-size:14px;color:var(--muted)}.crumbs{font-size:14px;color:var(--muted)}.buy{margin:14px 0}
-.site-footer{background:#fff;border-top:1px solid var(--line);font-size:15px;color:var(--muted);padding:18px 0}
-@media(max-width:600px){nav a{margin:0 12px 0 0}}
+CSS = """@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/poppins-400.woff2") format("woff2")}
+@font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/poppins-600.woff2") format("woff2")}
+@font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/poppins-700.woff2") format("woff2")}
+:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif;--container:1440px;--gutter:clamp(20px,4vw,64px);--section:clamp(40px,5vw,68px)}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink)}
+img{max-width:100%;height:auto;display:block}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.wrap{width:100%;max-width:var(--container);margin-inline:auto;padding-inline:var(--gutter)}
+.skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:10px 14px;z-index:9}
+.announce{background:var(--pink);color:#fff}
+.announce p{margin:0;padding:12px 0;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.site-header{background:var(--cream);border-bottom:1px solid var(--line)}
+.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 28px;padding-top:22px;padding-bottom:22px}
+.brand{font-family:var(--sans);font-weight:700;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
+.site-header nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 4px;min-height:44px}
+.site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
+.site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:14px 22px}
+.page{padding-top:44px;padding-bottom:var(--section)}
+h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
+h1{font-size:clamp(40px,4.6vw,68px);margin:0 0 28px;max-width:none}
+h2{font-size:clamp(32px,4vw,52px);margin:48px 0 24px}
+:is(.wrap,.page) > h2:first-child{margin-top:0}
+h3{font-size:26px;margin:0 0 .25em}
+.lede,.section-lead,.upsell p,.page > p:not(.notice){font-size:18px;max-width:65ch}
+.lede,.section-lead,.page > .lede{margin:0 0 28px}
+.section-lead{margin-top:0}
+.page > p:not(.notice):not(.lede):not(.after-list){margin:0 0 20px}
+.after-list{margin:32px 0 0}
+.hero{padding:32px 0 20px}
+.hero-grid{display:grid;gap:28px;align-items:center}
+.hero-visual{margin:0}
+.hero-visual img{width:100%;height:220px;object-fit:cover;object-position:68% 42%}
+.hero h1{font-size:clamp(36px,3.4vw,56px);max-width:none;margin-bottom:24px}
+.proof{padding:20px 0}
+.proof p{margin:0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px;font-weight:600;max-width:none}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;background:var(--pink);color:#fff;padding:14px 22px;border-radius:2px;text-decoration:none;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:14px;border:2px solid var(--pink);cursor:pointer}
+.btn:hover{background:var(--pink-d);border-color:var(--pink-d);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:#fff}
+.btn-small{min-height:46px;padding:10px 14px;font-size:12px}
+.trust{padding-top:var(--section);padding-bottom:var(--section)}
+.trust-row{list-style:none;margin:0;padding:8px 0 4px;display:grid;gap:16px}
+.trust-row li{display:grid;gap:4px}
+.trust-row strong{font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.trust-row span{color:var(--muted);font-size:15px}
+.band,.how,.upsell,.faq-teaser{padding-top:var(--section);padding-bottom:var(--section)}
+.grid{display:grid;grid-template-columns:1fr;gap:36px}
+.card{background:transparent;display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.card-body{display:flex;flex-direction:column;gap:10px;padding:24px 4px 8px}
+.card h3{font-size:22px;text-transform:uppercase;letter-spacing:-.02em}
+.card h3 a{color:var(--ink);text-decoration:none}
+.card h3 a:hover{text-decoration:underline}
+.card p{margin:0}
+.price{font-family:var(--sans);font-size:32px;font-weight:700;margin:0}
+.price span{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.08em}
+.card .btn{margin-top:6px;align-self:flex-start}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.steps li{padding-top:8px}
+.steps p{margin:.3em 0 0;color:var(--muted)}
+.upsell-grid{display:grid;gap:22px;align-items:center}
+.upsell-grid img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.deadline{padding-top:var(--section);padding-bottom:var(--section)}
+.notice{background:#fff;border:2px solid var(--ink);padding:28px 32px;margin:0;max-width:none}
+.product-intro{display:grid;gap:22px;align-items:center;margin-bottom:12px}
+.product-photo{margin:0}
+.product-photo img{width:100%;aspect-ratio:1/1;object-fit:cover}
+.text-link{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
+table{border-collapse:collapse;width:100%;background:#fff;margin:16px 0;border:2px solid var(--ink)}
+th,td{border-bottom:1px solid var(--line);padding:16px 20px;text-align:left;vertical-align:top}
+th{font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+details{background:#fff;border:2px solid var(--ink);border-bottom:0;margin:0;padding:0}
+details:last-of-type{border-bottom:2px solid var(--ink)}
+summary{font-weight:700;cursor:pointer;list-style:none;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;font-size:28px;font-weight:400;line-height:1}
+details[open] summary::after{content:"−"}
+details p{margin:0;padding:0 24px 20px;max-width:none}
+.order{display:grid;gap:16px;max-width:640px}
+.order label{display:grid;gap:8px;font-weight:600}
+.order input,.order select,.order textarea{font:16px/1.4 var(--sans);padding:14px 16px;border:2px solid var(--ink);border-radius:0;background:#fff;min-height:48px}
+.hp{position:absolute;left:-5000px}
+.small,.fine{font-size:14px}
+.crumbs{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.buy{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
+.site-footer{background:#111;color:#fbf6f1;padding:64px 0 40px}
+.site-footer a{color:#fbf6f1}
+.footer-brand{font-family:var(--sans);font-size:36px;font-weight:700;margin:0 0 8px;letter-spacing:-.03em}
+.site-footer nav{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0}
+.site-footer nav a{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-underline-offset:4px}
+.site-footer .fine{color:#fbf6f1}
+.order-steps li{margin:8px 0}
+@media(min-width:800px){
+.site-header nav{gap:10px 32px}
+.trust-row{grid-template-columns:repeat(4,1fr);gap:22px}
+.grid{grid-template-columns:1fr 1fr;gap:36px}
+.steps-3{grid-template-columns:1fr 1fr 1fr;gap:32px}
+.hero{padding:40px 0 24px}
+.hero-grid{grid-template-columns:1.15fr .85fr;gap:40px}
+.hero-visual img{height:min(360px,42vh)}
+.upsell-grid{grid-template-columns:1fr 1fr;gap:64px}
+.product-intro{grid-template-columns:1.05fr .95fr;gap:48px}
+.product-photo{order:2}
+}
+@media(min-width:1280px){
+.grid{grid-template-columns:repeat(4,1fr);gap:36px}
+}
 """
 
 JS = """(function(){
@@ -542,7 +705,7 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
 RewriteEngine On
 
-# Block repo internals and the 2022 backup from the web
+# Block repo internals, the 2022 backup, and markdown (including CREDITS.md) from the web
 RewriteRule ^(\.git|\.github|_legacy-2022)(/|$) - [F,L,NC]
 RewriteRule ^(build\.py|README\.md|.*\.md)$ - [F,L,NC]
 
@@ -554,12 +717,10 @@ RewriteRule ^staging(/|$) - [R=404,L,NC]
 RewriteCond %{HTTP_HOST} ^staging\. [NC]
 RewriteRule ^robots\.txt$ /robots-staging.txt [L]
 
-# Production: force HTTPS and the bare domain (staging is left alone)
+# www to the bare domain. Do not also force HTTPS for torontocookies.ca here.
+# Hostinger's Force HTTPS already 301s http://torontocookies.ca/ at the CDN.
+# Testing %{HTTPS} !=on and X-Forwarded-Proto on LiteSpeed returns 500 for that request.
 RewriteCond %{HTTP_HOST} ^www\.torontocookies\.ca$ [NC]
-RewriteRule ^(.*)$ https://torontocookies.ca/$1 [R=301,L]
-RewriteCond %{HTTP_HOST} ^torontocookies\.ca$ [NC]
-RewriteCond %{HTTPS} !=on
-RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteRule ^(.*)$ https://torontocookies.ca/$1 [R=301,L]
 
 # Old 2022 page URL, if anything still links to it
@@ -684,6 +845,68 @@ jobs:
           temporaryPublicStorage: true
 """
 
+# The Hostinger FTP user (u916429614) is rooted at /home/u916429614, not public_html.
+# server-dir must be domains/torontocookies.ca/public_html/staging/ so uploads land in the
+# subdomain document root. Never ./, /, public_html/, or domains/torontocookies.ca/public_html/.
+# The sync state file is server-dir + state-name, so it stays inside that staging folder.
+# dangerous-clean-slate stays false: the action must not wipe the server folder.
+DEPLOY_STAGING = r"""name: Deploy staging
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ftp:
+    name: FTPS deploy to staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check FTP secrets
+        id: ftp
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        run: |
+          if [ -z "$FTP_SERVER" ] || [ -z "$FTP_USERNAME" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "::notice::FTP secrets are not set (FTP_SERVER, FTP_USERNAME, FTP_PASSWORD). Skipping the staging deploy."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "FTP secrets are present. Deploying into domains/torontocookies.ca/public_html/staging/ only."
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.ftp.outputs.ready == 'true'
+
+      - name: Deploy into domains/torontocookies.ca/public_html/staging over FTPS
+        if: steps.ftp.outputs.ready == 'true'
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          local-dir: ./
+          # Relative to /home/u916429614. Never ./, /, public_html/, or the production public_html root.
+          server-dir: domains/torontocookies.ca/public_html/staging/
+          # Stored inside that staging folder. Deletes only paths listed there.
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/build.py
+            **/*.md
+            **/_legacy-2022/**
+"""
+
 LHCI = json.dumps({"ci": {
     "collect": {"staticDistDir": ".", "url": ["/index.html", "/order/index.html", "/client-cookie-gift-pack-toronto/index.html"], "numberOfRuns": 1},
     "assert": {"assertions": {
@@ -729,6 +952,30 @@ Static site for **Toronto Cookies**, a corporate and holiday cookie gifting conc
 * Form: FormSubmit.co posts to `CONFIG["ORDER_EMAIL"]` (first submission needs a one-time activation click).
 * Analytics: PostHog project 593979, events `package_cta_clicked`, `pay_link_clicked`, `quote_submitted`, `quote_thanks_viewed`; property `site_env` = production|staging.
 * `_legacy-2022/` is the backup of the 2022 page (blocked from the web by `.htaccess`).
+* Photo and type credits are in `CREDITS.md`, also blocked by the markdown rule.
+* Bare-domain HTTPS is Hostinger's Force HTTPS setting. `.htaccess` only redirects `www` to the apex, so `staging.*` is left alone (noindex header and `robots-staging.txt` still apply there).
+* A push to `staging` deploys into `domains/torontocookies.ca/public_html/staging/` over FTPS (the FTP account is rooted at the home directory). Missing secrets skip the deploy.
+"""
+
+CREDITS = """# Credits
+
+Photographs and typefaces used on torontocookies.ca. This file is blocked from the web by the `.htaccess` rule that forbids `*.md`.
+
+## Photographs
+
+Most photographs are used under the [Unsplash License](https://unsplash.com/license). The home hero is used under the [Pexels License](https://www.pexels.com/license/). The iced sugar cookies are from Wikimedia Commons under CC BY-SA 3.0. This WebP crop is shared under the same licence.
+
+| File | What it shows | Source |
+| --- | --- | --- |
+| `assets/hero.webp` | Wrapped gift boxes with satin ribbons | https://www.pexels.com/photo/1303081/ — [Pexels License](https://www.pexels.com/license/) (commercial use, no attribution required). File: https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg |
+| `assets/gift-box.webp` | A stack of chocolate chip cookies | https://images.unsplash.com/photo-1548365328-8c6db3220e4c |
+| `assets/office-tray.webp` | Cookies in a parchment-lined bowl | https://images.unsplash.com/photo-1558961363-fa8fdf82db35 — Mae Mu |
+| `assets/client-gifts.webp` | Gingerbread people and snowflakes | https://images.unsplash.com/photo-1639590229762-3c9a8c98ca31 |
+| `assets/logo-cookies.webp` | Iced sugar cookies with sprinkles | https://commons.wikimedia.org/wiki/File:Decorated_sugar_cookies.jpg — Julie Anne Workman, CC BY-SA 3.0 |
+
+## Type
+
+Poppins, from Google Fonts, used under the SIL Open Font License. The Latin woff2 files (400, 600, 700) are self-hosted in `assets/fonts/`.
 """
 
 def write(rel, content, mode="w"):
@@ -752,16 +999,21 @@ def build():
     paths = sorted(paths, key=lambda p: (p != "/", p))
     write("sitemap.xml", sitemap(paths))
     write(".github/workflows/qa.yml", WORKFLOW)
+    write(".github/workflows/deploy-staging.yml", DEPLOY_STAGING)
     write(".github/lighthouserc.json", LHCI)
     write(".github/pull_request_template.md", PR_TEMPLATE)
     write("README.md", README)
+    write("CREDITS.md", CREDITS)
     write("_legacy-2022/index.html", LEGACY_HTML)
     print("built %d pages" % len(pages))
 
 def check():
     errors = []
     req = ["index.html", "404.html", ".htaccess", "robots.txt", "robots-staging.txt", "sitemap.xml", "llms.txt",
-           "assets/site.css", "assets/site.js", "assets/logo.png", "_legacy-2022/index.html", "_legacy-2022/assets/torontocookies.jpg"]
+           "CREDITS.md", "assets/site.css", "assets/site.js", "assets/logo.png",
+           "assets/hero.webp", "assets/hero-800.webp", "assets/gift-box.webp", "assets/office-tray.webp", "assets/client-gifts.webp", "assets/logo-cookies.webp",
+           "assets/fonts/poppins-400.woff2", "assets/fonts/poppins-600.woff2", "assets/fonts/poppins-700.woff2",
+           "_legacy-2022/index.html", "_legacy-2022/assets/torontocookies.jpg"]
     for r in req:
         if not os.path.exists(os.path.join(ROOT, r)):
             errors.append("missing " + r)

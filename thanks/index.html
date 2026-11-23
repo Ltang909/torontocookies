@@ -16,7 +16,8 @@
 <meta property="og:locale" content="en_CA">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
-<link rel="stylesheet" href="/assets/site.css">
+
+<link rel="stylesheet" href="/assets/site.css?v=6">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -77,11 +78,12 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
+<div class="announce"><div class="wrap"><p>Order by Wednesday, December 9, 2026 for delivery by Friday, December 18, 2026.</p></div></div>
 <header class="site-header"><div class="wrap">
-<a class="brand" href="/"><img src="/assets/logo.png" alt="Toronto Cookies logo" width="48" height="48"> Toronto Cookies</a>
+<a class="brand" href="/">Toronto Cookies</a>
 <nav aria-label="Main"><a href="/">Home</a><a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a><a href="/faq/">FAQ</a><a href="/order/">Order / quote</a></nav>
 </div></header>
-<main id="main" class="wrap">
+<main id="main" class="wrap page">
 <h1 id="thx-h">Thanks, your request is in</h1><p class="lede" id="thx-p">We'll reply within one business day with the bakery, delivery date, final price and a secure payment link. Nothing is ordered until you approve and pay.</p><p><a href="/">Back to home</a></p>
 <script>(function(){var m=location.search.match(/[?&]paid=([\w-]+)/);
 if(m){document.getElementById('thx-h').textContent='Payment received, thank you!';
@@ -89,9 +91,20 @@ document.getElementById('thx-p').textContent='Your receipt is on its way by emai
 window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'order_paid_thanks_viewed':'quote_thanks_viewed',{package:m?m[1]:null});}});})();</script>
 </main>
 <footer class="site-footer"><div class="wrap">
-<p><strong>Toronto Cookies</strong> is a corporate and holiday cookie gifting concierge serving Toronto and the GTA. We source from licensed, inspected Toronto bakeries; we do not bake or handle food ourselves.</p>
-<p><a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a> · <a href="/office-cookie-tray-toronto/">Office tray $129</a> · <a href="/client-cookie-gift-pack-toronto/">Client pack $590</a> · <a href="/logo-cookies-toronto/">Logo cookies</a> · <a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a> · <a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a> · <a href="/about/">About</a></p>
-<p>Questions: <a href="mailto:orders@torontocookies.ca">orders@torontocookies.ca</a> · Prices in CAD · © 2026 Toronto Cookies</p>
+<p class="footer-brand">Toronto Cookies</p>
+<p>A corporate and holiday cookie gifting concierge for Toronto and the GTA. We source from licensed, inspected Toronto bakeries. We do not bake or handle food ourselves.</p>
+<nav aria-label="Footer">
+<a href="/holiday-cookie-gift-box-toronto/">Single gift $59</a>
+<a href="/office-cookie-tray-toronto/">Office tray $129</a>
+<a href="/client-cookie-gift-pack-toronto/">Client pack $590</a>
+<a href="/logo-cookies-toronto/">Logo cookies</a>
+<a href="/guides/holiday-cookie-gift-deadlines-toronto-2026/">2026 order deadlines</a>
+<a href="/custom-cookie-prices-toronto/">Toronto cookie price guide</a>
+<a href="/about/">About</a>
+<a href="/faq/">FAQ</a>
+<a href="/order/">Order</a>
+</nav>
+<p class="fine">Questions: <a href="mailto:orders@torontocookies.ca">orders@torontocookies.ca</a> · Prices in CAD · © 2026 Toronto Cookies</p>
 </div></footer>
 <script src="/assets/site.js" defer></script>
 </body>

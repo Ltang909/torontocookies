@@ -9,3 +9,6 @@ Static site for **Toronto Cookies**, a corporate and holiday cookie gifting conc
 * Form: FormSubmit.co posts to `CONFIG["ORDER_EMAIL"]` (first submission needs a one-time activation click).
 * Analytics: PostHog project 593979, events `package_cta_clicked`, `pay_link_clicked`, `quote_submitted`, `quote_thanks_viewed`; property `site_env` = production|staging.
 * `_legacy-2022/` is the backup of the 2022 page (blocked from the web by `.htaccess`).
+* Photo and type credits are in `CREDITS.md`, also blocked by the markdown rule.
+* Bare-domain HTTPS is Hostinger's Force HTTPS setting. `.htaccess` only redirects `www` to the apex, so `staging.*` is left alone (noindex header and `robots-staging.txt` still apply there).
+* A push to `staging` deploys into `domains/torontocookies.ca/public_html/staging/` over FTPS (the FTP account is rooted at the home directory). Missing secrets skip the deploy.
