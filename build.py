@@ -245,7 +245,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 {preload_tag}
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/site.css?v=2">
 <script type="application/ld+json">
 {ld}
 </script>
