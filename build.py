@@ -245,7 +245,7 @@ def page(path, title, desc, body, schema_nodes, h_crumbs=None, preload=None, ble
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/assets/logo.png" type="image/png">
 {preload_tag}
-<link rel="stylesheet" href="/assets/site.css?v=5">
+<link rel="stylesheet" href="/assets/site.css?v=6">
 <script type="application/ld+json">
 {ld}
 </script>
@@ -359,7 +359,7 @@ def build_pages():
 <section class="faq-teaser"><div class="wrap">
 <h2>Common questions</h2>
 {faq_html(FAQ[:5])}
-<p><a class="text-link" href="/faq/">All questions</a></p>
+<p class="after-list"><a class="text-link" href="/faq/">All questions</a></p>
 </div></section>"""
     out["index.html"] = page("/", "Corporate & Holiday Cookie Gifts Toronto | Toronto Cookies",
         "Corporate and holiday cookie gifts delivered across Toronto from top local bakeries. Single gifts $59, office trays $129, 10 client gifts $590. Order by Dec 9.",
@@ -416,7 +416,7 @@ def build_pages():
 <h2>How ordering works</h2>
 <ol class="order-steps"><li>Send the order form (2 minutes).</li><li>We confirm the bakery, date and final price within one business day.</li><li>You pay by card through a secure Stripe link. Nothing is ordered before payment.</li><li>We place the order, add cards and confirm delivery.</li></ol>
 <h2>Questions</h2>{faq_html(pfaq)}
-<p>Other packages: {' · '.join(f'<a href="/{q["slug"]}/">{e(q["name"])}</a>' for q in PACKAGES if q is not p)}</p>"""
+<p class="after-list">Other packages: {' · '.join(f'<a href="/{q["slug"]}/">{e(q["name"])}</a>' for q in PACKAGES if q is not p)}</p>"""
         title = {"single-gift": "Holiday Cookie Gift Box Delivered in Toronto ($59) | Toronto Cookies",
                  "office-tray": "Office Cookie Tray Toronto for Holiday Parties ($129)",
                  "client-gift-pack": "Client Cookie Gifts Toronto: 10 Boxes, 10 Addresses ($590)",
@@ -465,7 +465,7 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
     # FAQ
     out["faq/index.html"] = page("/faq/", "Corporate Cookie Gift FAQ: Prices, Deadlines & Delivery",
         "Answers about corporate and holiday cookie gifts in Toronto: prices, 2026 order deadlines, multi-address delivery, nut-free options, logo cookies and payment.",
-        f"<h1>Frequently asked questions</h1>{faq_html(FAQ)}<p><a class='btn' href='/order/'>Start an order</a></p>",
+        f"<h1>Frequently asked questions</h1>{faq_html(FAQ)}<p class='after-list'><a class='btn' href='/order/'>Start an order</a></p>",
         [faq_schema(FAQ)], [("/", "Home"), ("/faq/", "FAQ")])
 
     # About
@@ -542,7 +542,7 @@ window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'
 CSS = """@font-face{font-family:Poppins;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/fonts/poppins-400.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:600;font-display:swap;src:url("/assets/fonts/poppins-600.woff2") format("woff2")}
 @font-face{font-family:Poppins;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/fonts/poppins-700.woff2") format("woff2")}
-:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif;--container:1440px;--gutter:clamp(20px,4vw,64px);--section:clamp(64px,8vw,128px)}
+:root{--cream:#fbf6f1;--ink:#161616;--pink:#d4145a;--pink-d:#b01048;--muted:#3d3d3d;--line:#eadfd4;--sans:Poppins,sans-serif;--container:1440px;--gutter:clamp(20px,4vw,64px);--section:clamp(40px,5vw,68px)}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;font:16px/1.55 var(--sans);background:var(--cream);color:var(--ink)}
 img{max-width:100%;height:auto;display:block}
@@ -553,22 +553,23 @@ a{color:var(--ink)}
 .announce{background:var(--pink);color:#fff}
 .announce p{margin:0;padding:12px 0;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .site-header{background:var(--cream);border-bottom:1px solid var(--line)}
-.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding-top:16px;padding-bottom:14px}
+.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 28px;padding-top:22px;padding-bottom:22px}
 .brand{font-family:var(--sans);font-weight:700;font-size:28px;letter-spacing:-.03em;text-decoration:none;color:var(--ink);line-height:1}
-.site-header nav{display:flex;flex-wrap:wrap;gap:4px}
-.site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 10px;min-height:44px}
+.site-header nav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.site-header nav a{text-decoration:none;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);padding:12px 4px;min-height:44px}
 .site-header nav a[aria-current]{text-decoration:underline;text-underline-offset:6px}
-.site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:12px 14px}
-.page{padding-top:var(--section);padding-bottom:var(--section)}
+.site-header nav a[href="/order/"]{background:var(--ink);color:#fff;border-radius:2px;padding:14px 22px}
+.page{padding-top:44px;padding-bottom:var(--section)}
 h1,h2,h3{font-family:var(--sans);font-weight:700;letter-spacing:-.03em;line-height:1.02;color:var(--ink)}
 h1{font-size:clamp(40px,4.6vw,68px);margin:0 0 28px;max-width:none}
-h2{font-size:clamp(32px,4vw,52px);margin:64px 0 24px}
+h2{font-size:clamp(32px,4vw,52px);margin:48px 0 24px}
 :is(.wrap,.page) > h2:first-child{margin-top:0}
 h3{font-size:26px;margin:0 0 .25em}
 .lede,.section-lead,.upsell p,.page > p:not(.notice){font-size:18px;max-width:65ch}
 .lede,.section-lead,.page > .lede{margin:0 0 28px}
 .section-lead{margin-top:0}
-.page > p:not(.notice):not(.lede){margin:0 0 20px}
+.page > p:not(.notice):not(.lede):not(.after-list){margin:0 0 20px}
+.after-list{margin:32px 0 0}
 .hero{padding:32px 0 20px}
 .hero-grid{display:grid;gap:28px;align-items:center}
 .hero-visual{margin:0}
@@ -610,14 +611,19 @@ h3{font-size:26px;margin:0 0 .25em}
 .product-photo{margin:0}
 .product-photo img{width:100%;aspect-ratio:1/1;object-fit:cover}
 .text-link{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:14px}
-table{border-collapse:collapse;width:100%;background:#fff;margin:12px 0}
-th,td{border-bottom:1px solid var(--line);padding:12px;text-align:left;vertical-align:top}
+table{border-collapse:collapse;width:100%;background:#fff;margin:16px 0;border:2px solid var(--ink)}
+th,td{border-bottom:1px solid var(--line);padding:16px 20px;text-align:left;vertical-align:top}
 th{font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-details{background:#fff;border-bottom:1px solid var(--line);padding:18px 0;margin:0}
-summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:center}
-.order{display:grid;gap:14px;max-width:640px}
-.order label{display:grid;gap:6px;font-weight:600}
-.order input,.order select,.order textarea{font:16px/1.4 var(--sans);padding:12px;border:2px solid var(--ink);border-radius:0;background:#fff;min-height:48px}
+details{background:#fff;border:2px solid var(--ink);border-bottom:0;margin:0;padding:0}
+details:last-of-type{border-bottom:2px solid var(--ink)}
+summary{font-weight:700;cursor:pointer;list-style:none;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;font-size:28px;font-weight:400;line-height:1}
+details[open] summary::after{content:"−"}
+details p{margin:0;padding:0 24px 20px;max-width:none}
+.order{display:grid;gap:16px;max-width:640px}
+.order label{display:grid;gap:8px;font-weight:600}
+.order input,.order select,.order textarea{font:16px/1.4 var(--sans);padding:14px 16px;border:2px solid var(--ink);border-radius:0;background:#fff;min-height:48px}
 .hp{position:absolute;left:-5000px}
 .small,.fine{font-size:14px}
 .crumbs{font-size:13px;letter-spacing:.06em;text-transform:uppercase}
@@ -630,6 +636,7 @@ summary{font-weight:700;cursor:pointer;min-height:48px;display:flex;align-items:
 .site-footer .fine{color:#fbf6f1}
 .order-steps li{margin:8px 0}
 @media(min-width:800px){
+.site-header nav{gap:10px 32px}
 .trust-row{grid-template-columns:repeat(4,1fr);gap:22px}
 .grid{grid-template-columns:1fr 1fr;gap:36px}
 .steps-3{grid-template-columns:1fr 1fr 1fr;gap:32px}
