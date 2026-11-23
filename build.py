@@ -27,12 +27,13 @@ CONFIG = {
 }
 
 # >>> STRIPE PAYMENT LINK PLACEHOLDERS <<<
-# Leave as "" until Leon approves creating the Stripe Payment Links.
-# While empty, every "Pay" button falls back to the inquiry form, so nothing breaks.
+# Live Stripe Payment Links (Builtbylt account, CAD, no tax), created Nov 23, 2026.
+# After payment Stripe redirects to /thanks/?paid=<package>&session_id=...
+# An empty value makes that package's button fall back to the inquiry form.
 STRIPE_LINKS = {
-    "single-gift": "",        # STRIPE_LINK_SINGLE_GIFT_59
-    "office-tray": "",        # STRIPE_LINK_OFFICE_TRAY_129
-    "client-gift-pack": "",   # STRIPE_LINK_CLIENT_GIFT_PACK_590
+    "single-gift": "https://buy.stripe.com/cNidR87XF4IRgj69y29ws02",       # plink_1Uf2EPAknPcpAXyTnyLcULq1, $59 CAD
+    "office-tray": "https://buy.stripe.com/eVq3cua5N2AJgj6dOi9ws03",       # plink_1Uf2EYAknPcpAXyTrr3AN935, $129 CAD
+    "client-gift-pack": "https://buy.stripe.com/6oUcN45Px3EN7MA7pU9ws04",  # plink_1Uf2EdAknPcpAXyTuovy1Sf3, $590 CAD
     "logo-cookies": "",       # Custom quote -> Stripe Invoice, never a fixed link
 }
 
@@ -304,6 +305,7 @@ def build_pages():
     body = f"""<h1>Corporate cookie gifts in Toronto</h1>
 <p class="lede"><strong>The easiest way to send cookie gifts to Toronto clients and staff:</strong> choose a package ($59 single gift, $129 office tray, $590 for ten clients, or custom logo cookies), send one list, and Toronto Cookies coordinates a licensed Toronto bakery, personalized cards and delivery to every address.</p>
 {DEADLINE}
+<h2>Packages</h2>
 <div class="grid">{cards}</div>
 <h2>Popular uses</h2>
 <ul>
@@ -383,8 +385,11 @@ def build_pages():
 
     out["thanks/index.html"] = page("/thanks/", "Thanks, we've got your request | Toronto Cookies",
         "Thanks for your Toronto Cookies request.",
-        """<h1>Thanks, your request is in</h1><p class="lede">We'll reply within one business day with the bakery, delivery date, final price and a secure payment link. Nothing is ordered until you approve and pay.</p><p><a href="/">Back to home</a></p>
-<script>window.addEventListener('load',function(){if(window.posthog)posthog.capture('quote_thanks_viewed');});</script>""", [])
+        """<h1 id="thx-h">Thanks, your request is in</h1><p class="lede" id="thx-p">We'll reply within one business day with the bakery, delivery date, final price and a secure payment link. Nothing is ordered until you approve and pay.</p><p><a href="/">Back to home</a></p>
+<script>(function(){var m=location.search.match(/[?&]paid=([\\w-]+)/);
+if(m){document.getElementById('thx-h').textContent='Payment received, thank you!';
+document.getElementById('thx-p').textContent='Your receipt is on its way by email. Within one business day we will email you to confirm the bakery, delivery date and any recipient details, then place your order.';}
+window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'order_paid_thanks_viewed':'quote_thanks_viewed',{package:m?m[1]:null});}});})();</script>""", [])
 
     # FAQ
     out["faq/index.html"] = page("/faq/", "Corporate Cookie Gift FAQ: Prices, Deadlines & Delivery",

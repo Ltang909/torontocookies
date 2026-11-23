@@ -82,8 +82,11 @@ posthog.register({site:'torontocookies.ca',site_env:(location.hostname.indexOf('
 <nav aria-label="Main"><a href="/">Home</a><a href="/corporate-cookie-gifts-toronto/">Corporate gifts</a><a href="/faq/">FAQ</a><a href="/order/">Order / quote</a></nav>
 </div></header>
 <main id="main" class="wrap">
-<h1>Thanks, your request is in</h1><p class="lede">We'll reply within one business day with the bakery, delivery date, final price and a secure payment link. Nothing is ordered until you approve and pay.</p><p><a href="/">Back to home</a></p>
-<script>window.addEventListener('load',function(){if(window.posthog)posthog.capture('quote_thanks_viewed');});</script>
+<h1 id="thx-h">Thanks, your request is in</h1><p class="lede" id="thx-p">We'll reply within one business day with the bakery, delivery date, final price and a secure payment link. Nothing is ordered until you approve and pay.</p><p><a href="/">Back to home</a></p>
+<script>(function(){var m=location.search.match(/[?&]paid=([\w-]+)/);
+if(m){document.getElementById('thx-h').textContent='Payment received, thank you!';
+document.getElementById('thx-p').textContent='Your receipt is on its way by email. Within one business day we will email you to confirm the bakery, delivery date and any recipient details, then place your order.';}
+window.addEventListener('load',function(){if(window.posthog){posthog.capture(m?'order_paid_thanks_viewed':'quote_thanks_viewed',{package:m?m[1]:null});}});})();</script>
 </main>
 <footer class="site-footer"><div class="wrap">
 <p><strong>Toronto Cookies</strong> is a corporate and holiday cookie gifting concierge serving Toronto and the GTA. We source from licensed, inspected Toronto bakeries; we do not bake or handle food ourselves.</p>
